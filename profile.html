@@ -1,0 +1,280 @@
+
+ <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICONA 2.0 — Личный кабинет</title>
+  <link rel="stylesheet" href="profile.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+
+
+ <div class="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-container" style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="nav-brand" style="display:flex;flex-direction:column;align-items:flex-start;min-width:170px;">
+                    <h1 style="margin-bottom:0;line-height:1.1;">ICONA 2.0</h1>
+                    <span class="nav-subtitle" style="margin-top:0.1em;">Платформа обучения</span>
+                </div>
+                <!-- Строка поиска -->
+                <div class="nav-search" style="flex:1;display:flex;justify-content:center;align-items:center;">
+                    <input id="site-search" type="text" placeholder="Поиск по сайту..." style="width:320px;max-width:100%;padding:0.6em 2.2em 0.6em 1em;border:1.5px solid #d32f2f;border-radius:24px;font-size:1em;outline:none;box-shadow:none;">
+                    <span style="position:relative;right:32px;color:#d32f2f;font-size:1.2em;pointer-events:none;">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#d32f2f" stroke-width="2"/><line x1="14.4142" y1="14" x2="18" y2="17.5858" stroke="#d32f2f" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                </div>
+                <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
+                    <a class="nav-item" href="index.html">Главная</a>
+                    <a class="nav-item" href="roles.html">Роли</a>
+                    <a class="nav-item" href="engineer.html">Модули</a>
+                    <a class="nav-item" href="application1.html">Приложения</a>
+                    <div id="nav-user" style="display:none;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;">
+                        <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);border:2px solid #d32f2f;">
+                        <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+<!-- Личный кабинет -->
+<section id="profile-section" class="section active" style="min-height:100vh; background:#f5f5f5; flex-direction:row; justify-content:center; align-items:flex-start; gap:150px; padding-top:150px;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:48px;">
+  <div class="dashboard-tiles-container" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:900px; width:100%; margin-bottom:0;">
+    <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Обучение</h2>
+    <div class="dashboard-tiles-grid" style="display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr); gap:32px 32px;">
+      <div class="dashboard-tile" onclick="openTileModal('tile1')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:250px; min-height:220px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:900; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">5</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="8" y="12" width="32" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 20h16M16 28h10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Отчётность</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 обработка<br>+3 принято</div>
+      </div>
+      <div class="dashboard-tile" onclick="openTileModal('tile2')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Предписания</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 новое<br>22.12.16</div>
+      </div>
+      <div class="dashboard-tile" onclick="openTileModal('tile3')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 24l6 6 10-10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Уведомления</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">+1 новое<br>22.12.16</div>
+      </div>
+      <div class="dashboard-tile" onclick="openTileModal('tile4')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">6</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Сообщения</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 непрочитано<br>+4 всего</div>
+      </div>
+      <div class="dashboard-tile" onclick="openTileModal('tile5')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">2</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Документы</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">+2 новых<br>22.12.16</div>
+      </div>
+      <div class="dashboard-tile" onclick="openTileModal('tile6')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">3</span>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Разъяснения</div>
+        <div style="color:#fff; font-size:0.99em; opacity:0.95;">2 периода<br>+3 новых</div>
+      </div>
+    </div>
+  </div>
+  <!-- Блок 'Ваши достижения' -->
+  <div class="achievements-list" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:540px; width:100%; margin-top:40px;">
+    <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Ваши достижения</h2>
+    <div style="width:100%; display:flex; flex-direction:column; gap:18px;">
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff8e1; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">1 этап: Знакомство с ПО</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">75%</span>
+        <img src="gold_medal.svg" alt="Золотая медаль" style="width:32px; height:32px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#f4f6f8; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">2 этап: Основы моделирования</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">62%</span>
+        <img src="silver_medal.svg" alt="Серебряная медаль" style="width:50px; height:50px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">3 этап: Расширенные функции</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">48%</span>
+        <img src="bronze_medal.svg" alt="Бронзовая медаль" style="width:50px; height:50px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">4 этап: Работа с проектами</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">5 этап: Оптимизация и производительность</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">6 этап: Сотрудничество и обмен данными</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">7 этап: Сертификация и продвинутые темы</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        <
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Профиль -->
+  <div id="profile-floating-block" class="profile-floating-block" style="position:sticky; top:35px; align-self:flex-start; background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; padding:2.1em 2.5em; min-width:290px; max-width:340px; display:flex; flex-direction:column; align-items:center; border:2px solid #d32f2f;">
+    <img id="profile-photo-floating" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Фото пользователя" style="width:82px;height:82px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 2px 12px #d32f2f22;margin-bottom:1.1em; border:2.5px solid #d32f2f;">
+    <div style="font-size:1.18em;font-weight:700;color:#2d2d2d;margin-bottom:0.2em;" id="profile-name-short">Имя Фамилия</div>
+    <div id="profile-username" style="font-size:1.08em;font-weight:500;color:#b71c1c;margin-bottom:0.2em;"></div>
+    <div style="color:#888;font-size:1.01em;margin-bottom:0.2em;" id="profile-company-short">Компания</div>
+    <div style="color:#b71c1c;font-size:1.01em;" id="profile-position-short">Должность</div>
+    <button onclick="openProfileModal()" style="margin-top:1.1em;background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 1.7em;font-weight:600;cursor:pointer;width:100%;font-size:1.01em;">Открыть профиль</button>
+    <button onclick="logout()" style="margin-top:0.7em;background:none;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:24px;padding:0.5em 1.7em;font-weight:600;cursor:pointer;width:100%;font-size:0.98em;">Выйти</button>
+    <div style="margin-top:0.7em;color:#888;font-size:0.98em;width:100%;text-align:left;">
+      История загрузок<br>Мои подписки
+    </div>
+  </div>
+</section>
+
+<!-- Модальные окна для плиток -->
+<div id="tile-modal" class="modal" style="display:none;position:fixed;z-index:10011;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.15);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.5rem 2.5rem 2rem 2.5rem;min-width:340px;max-width:600px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;">
+    <span class="close" onclick="closeTileModal()" style="position:absolute;top:18px;right:24px;font-size:2.2rem;color:#d32f2f;cursor:pointer;">&times;</span>
+    <h2 id="tile-modal-title" style="color:#d32f2f;margin-bottom:1.5em;">Заглушка</h2>
+    <div id="tile-modal-content" style="color:#888;font-size:1.1em;">Заглушка: контент появится после запуска функционала.</div>
+  </div>
+</div>
+
+<img id="profile-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Фото профиля" style="display:none;">
+
+<!-- Модальное окно профиля -->
+<div id="profile-modal" class="modal" style="display:none;position:fixed;z-index:10001;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.15);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.5rem 2.5rem 2rem 2.5rem;min-width:340px;max-width:900px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;display:flex;flex-direction:row;gap:2.5rem;align-items:flex-start;">
+    <span class="close" onclick="closeProfileModal()" style="position:absolute;top:18px;right:24px;font-size:2.2rem;color:#d32f2f;cursor:pointer;">&times;</span>
+    <!-- Левая часть: аватар и кнопки -->
+    <div style="display:flex;flex-direction:column;align-items:center;min-width:220px;max-width:260px;flex:0 0 220px;">
+      <img id="modal-photo-preview" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Фото пользователя" style="width:160px;height:160px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 16px rgba(211,47,47,.10);margin-bottom:1.2em;">
+      <label for="modal-photo" style="display:flex;align-items:center;gap:0.5em;background:#fff;color:#d32f2f;border:1.5px solid #d32f2f;border-radius:24px;padding:0.7em 1.5em;font-weight:600;cursor:pointer;transition:background .18s, color .18s;margin-bottom:0.7em;">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z" stroke="#d32f2f" stroke-width="2"/><path d="M4 19V7a2 2 0 0 1 2-2h2.172a2 2 0 0 0 1.414-.586l.828-.828A2 2 0 0 1 12.828 3h2.344a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 18.828 5H21a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4Z" stroke="#d32f2f" stroke-width="2"/></svg>
+        Загрузить фото
+        <input type="file" id="modal-photo" accept="image/*" style="display:none;">
+      </label>
+    </div>
+    <!-- Правая часть: форма -->
+    <form id="profile-form" style="flex:1;display:flex;flex-direction:column;gap:1.2em;">
+      <div style="display:flex;flex-wrap:wrap;gap:1.5em 2.5em;">
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Фамилия:<br><input type="text" id="modal-lastname" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Имя:<br><input type="text" id="modal-firstname" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Отчество:<br><input type="text" id="modal-middlename" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Дата рождения:<br><input type="date" id="modal-birthdate" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Компания:<br><input type="text" id="modal-company" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Должность:<br><input type="text" id="modal-position" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">e-mail:<br><input type="email" id="modal-email" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Телефон:<br><input type="text" id="modal-phone" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div class="modal-row">
+          <div class="modal-col">
+            <label for="modal-new-password">Новый пароль:</label>
+            <input type="password" id="modal-new-password" name="modal-new-password" placeholder="Новый пароль">
+          </div>
+          <div class="modal-col">
+            <label for="modal-confirm-password">Подтвердите новый пароль:</label>
+            <input type="password" id="modal-confirm-password" name="modal-confirm-password" placeholder="Подтвердите новый пароль">
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:row;gap:1.5em;justify-content:center;align-items:center;margin-top:2.2em;">
+        <button type="button" id="delete-profile-btn" class="modal-save delete-btn" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.9em 2.5em;font-size:1.15em;font-weight:600;cursor:pointer;box-shadow:0 2px 16px rgba(211,47,47,0.10);transition:background 0.2s, transform 0.18s;">
+          Удалить профиль
+        </button>
+        <button type="submit" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.9em 2.5em;font-size:1.15em;font-weight:600;cursor:pointer;box-shadow:0 2px 16px rgba(211,47,47,0.10);transition:background 0.2s, transform 0.18s;">
+          Сохранить изменения
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления профиля -->
+<div id="delete-profile-modal" class="modal" style="display:none;position:fixed;z-index:10010;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.2rem 2.5rem;min-width:320px;max-width:400px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;display:flex;flex-direction:column;align-items:center;">
+    <span style="font-size:1.25em;color:#d32f2f;font-weight:600;margin-bottom:1.2em;text-align:center;">Ваш профиль и все достижения будут удалены. Продолжить?</span>
+    <div style="display:flex;gap:1.5em;justify-content:center;margin-top:1.2em;">
+      <button id="delete-profile-cancel" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 2em;font-size:1.08em;font-weight:600;cursor:pointer;transition:background 0.2s, transform 0.18s;">Нет</button>
+      <button id="delete-profile-confirm" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 2em;font-size:1.08em;font-weight:600;cursor:pointer;transition:background 0.2s, transform 0.18s;">Да</button>
+    </div>
+  </div>
+</div>
+
+
+        </main>
+
+
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#about">О нас</a>
+    <a href="#blog">Блог</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+  <div class="footer-socials">
+    <!-- Telegram -->
+    <a href="https://web.telegram.org/a/#-1002560486414" target="_blank" rel="noopener" aria-label="Telegram" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <!-- SVG Telegram Logo -->
+      <svg width="26" height="26" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="25" fill="#229ED9"/>
+        <path d="M37.5 15.5L32.5 36.5C32.5 36.5 31.5 38 30 37.5L22.5 31.5L19.5 34.5C19.5 34.5 19 35 18.5 34.5L19 28.5L32 18.5C32 18.5 32.5 18 32 17.5C31.5 17 30.5 17.5 30.5 17.5L15.5 23.5C15.5 23.5 14.5 24 15 25C15.5 26 16.5 25.5 16.5 25.5L22 23.5L28.5 28.5L30.5 20.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Telegram
+    </a>
+    <!-- Setltech.ru -->
+    <a href="https://setltech.ru/" target="_blank" rel="noopener" aria-label="SetlTech" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <img src="Setltech.svg" alt="SetlTech" width="32" height="22" style="vertical-align:middle;" />SetlTech</a>
+      
+    <!-- Setlgroup.ru -->
+    <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+        <img src="Setlgroup.svg" alt="SetlGroup" width="32" height="22" style="vertical-align:middle;" />SetlGroup</a>
+
+
+  </div>
+  <div class="footer-info">
+    SetlSoftIcona © 2025 · INFO@SETLTECH.RU · + 7 (812) 335-51-88
+  </div>
+</footer>
+
+
+
+
+  <script src="profile.js"></script>
+  <script src="main.js"></script>
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
+  
+</body>
+</html> 

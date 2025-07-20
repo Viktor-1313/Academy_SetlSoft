@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICONA 2.0 — Авторизация</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+  <header class="main-header">
+    <nav class="nav">
+      <div class="nav-container">
+        <a href="index.html" style="display:none;">Главная</a>
+        <a href="auth.html" style="display:none;">Авторизация</a>
+        <a href="roles.html" style="display:none;">Роли</a>
+        <a href="gamification.html" style="display:none;">Геймификация</a>
+        <a href="analytics.html" style="display:none;">Аналитика</a>
+        <a href="profile.html" style="display:none;">Личный кабинет</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section id="auth-section" class="section active">
+      <div class="container">
+        <!-- Форма авторизации -->
+        <div id="auth-page" style="width:100vw; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#fff; position:fixed; top:0; left:0; z-index:9999;">
+          <h1 style="color:#d32f2f; font-size:2.5rem; margin-bottom:2rem; font-weight:700; letter-spacing:2px;">ICONA 2.0</h1>
+          <form id="login-form" style="display:flex; flex-direction:column; width:320px; gap:1rem; background:#fff; padding:2rem; border-radius:14px; box-shadow:0 4px 24px rgba(211,47,47,0.10);">
+            <input id="login" type="text" autocomplete="username" placeholder="введите ваш логин (почта или телефон)..." style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; color:#222;">
+            <input id="password" type="password" autocomplete="current-password" placeholder="Введите пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; color:#222;">
+            <button type="submit" style="padding:0.75rem; font-size:1.1rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;">Войти</button>
+            <button type="button" id="forgot-btn" style="background:none; border:none; color:#d32f2f; text-align:left; cursor:pointer; margin-top:0.5rem;">Забыли логин или пароль?</button>
+            <div id="login-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+            <button type="button" id="register-btn" style="background:none; border:none; color:#d32f2f; text-align:left; cursor:pointer; margin-top:1.5rem; font-weight:600;">Регистрация</button>
+          </form>
+        </div>
+        <!-- Модальное окно восстановления пароля -->
+        <div id="reset-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#fff; align-items:center; justify-content:center; z-index:10000;">
+          <div style="background:#fff; padding:2rem; border-radius:14px; width:320px; display:flex; flex-direction:column; gap:1rem;">
+            <input id="reset-contact" type="text" placeholder="введите Ваш номер телефона или почту" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <button id="reset-btn" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer;">Сбросить пароль</button>
+            <input id="reset-code" type="text" maxlength="4" placeholder="введите код" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+            <button id="confirm-code-btn" style="display:none; padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer;">Подтвердить</button>
+            <input id="new-password" type="password" placeholder="Введите новый пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+            <input id="confirm-password" type="password" placeholder="Подтвердите новый пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+            <button id="reset-login-btn" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer; display:none;">Войти</button>
+            <div id="reset-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+            <button id="close-modal" style="background:none; border:none; color:#d32f2f; cursor:pointer; margin-top:0.5rem;">Отмена</button>
+          </div>
+        </div>
+        <!-- Страница регистрации -->
+        <div id="register-page" style="display:none; width:100vw; height:100vh; position:fixed; top:0; left:0; background:#fff; z-index:9999; align-items:center; justify-content:center;">
+          <form id="register-form" style="margin:auto; display:flex; flex-direction:column; width:340px; gap:1rem; background:#fff; padding:2rem; border-radius:14px; box-shadow:0 4px 24px rgba(211,47,47,0.10);">
+            <h2 style="color:#d32f2f; margin-bottom:1rem; text-align:center;">Регистрация</h2>
+            <input id="reg-firstname" type="text" placeholder="Имя" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-lastname" type="text" placeholder="Фамилия" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-middlename" type="text" placeholder="Отчество" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-birthdate" type="date" placeholder="Дата рождения" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-company" type="text" placeholder="Компания" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-position" type="text" placeholder="Должность" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-email" type="email" placeholder="Почта" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-phone" type="text" placeholder="Телефон" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-password" type="password" placeholder="Пароль" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-password-confirm" type="password" placeholder="Подтвердите пароль" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <input id="reg-photo" type="file" accept="image/*" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+            <button type="submit" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; font-weight:600;">Зарегистрироваться</button>
+            <div id="register-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+            <button type="button" id="register-cancel" style="background:none; border:none; color:#d32f2f; cursor:pointer; margin-top:0.5rem;">Отмена</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html> 

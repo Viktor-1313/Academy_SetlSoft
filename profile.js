@@ -1,0 +1,1327 @@
+// Application data
+const appData = {
+  roles: [
+    {"name": "ИПС", "title": "Инженер по строительству", "modules": 12, "hours": 24, "progress": 85, "color": "#D00020"},
+    {"name": "ИСК", "title": "Инженер строительного контроля", "modules": 10, "hours": 20, "progress": 92, "color": "#000000"},
+    {"name": "Администратор", "title": "Администратор системы", "modules": 15, "hours": 30, "progress": 78, "color": "#626C71"},
+    {"name": "Планировщик", "title": "Планировщик", "modules": 8, "hours": 16, "progress": 88, "color": "#D00020"},
+    {"name": "Руководитель", "title": "Руководитель проекта", "modules": 6, "hours": 12, "progress": 95, "color": "#000000"},
+    {"name": "Подрядчик", "title": "Подрядчик", "modules": 14, "hours": 28, "progress": 72, "color": "#626C71"},
+    {"name": "ЛАБ", "title": "Независимый контроль", "modules": 7, "hours": 14, "progress": 89, "color": "#D00020"},
+    {"name": "Охрана труда", "title": "Инженер по охране труда", "modules": 9, "hours": 18, "progress": 83, "color": "#000000"}
+  ],
+  levels: [
+    {"name": "Новичок", "range": "0-25%", "points": 0, "color": "#FF6B6B", "description": "Базовые концепции и интерфейс"},
+    {"name": "Практикант", "range": "26-50%", "points": 250, "color": "#4ECDC4", "description": "Основные функции и процессы"},
+    {"name": "Специалист", "range": "51-75%", "points": 500, "color": "#45B7D1", "description": "Продвинутые возможности"},
+    {"name": "Эксперт", "range": "76-100%", "points": 1000, "color": "#96CEB4", "description": "Экспертные функции и интеграции"}
+  ],
+  metrics: {
+    timeReduction: 38,
+    oldTime: 145,
+    newTime: 90,
+    avgCompletion: 85,
+    avgTestScore: 87,
+    roiFirstYear: 500,
+    investment: 5.5,
+    savings: 27.5
+  },
+  gamification: {
+    badges: ["Первые шаги", "Быстрый старт", "Эксперт модуля", "Командный игрок", "Новатор"],
+    challenges: ["Недельный марафон", "Безошибочное прохождение", "Помощь коллеге", "Творческое решение"],
+    leaderboard: [
+      {"name": "Иванов И.И.", "role": "ИПС", "points": 1250, "level": "Эксперт"},
+      {"name": "Петрова А.С.", "role": "ИСК", "points": 980, "level": "Специалист"},
+      {"name": "Сидоров П.П.", "role": "Планировщик", "points": 875, "level": "Специалист"}
+    ]
+  }
+};
+
+// Global navigation function
+function switchToSection(sectionId, event) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show target section
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.add('active');
+  }
+  
+  // Update navigation items
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  // Find and activate corresponding nav item
+  if (event && event.target && event.target.classList.contains('nav-item')) {
+    event.target.classList.add('active');
+  }
+  
+  // Scroll to top smoothly
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Универсальная функция для SPA-переключения секций
+function switchToSection(sectionId) {
+  // Список всех основных секций
+  const sectionIds = [
+    'home',
+    'roles',
+    'gamification',
+    'analytics',
+    'profile-section'
+  ];
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = (id === sectionId) ? (id === 'profile-section' ? 'flex' : 'block') : 'none';
+    }
+  });
+}
+
+// Initialize application when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  populateRoles();
+  populateLevels();
+  populateGamificationElements();
+  initializeROICalculator();
+  addInteractiveEffects();
+  
+  // Initialize statistics animation
+  setTimeout(animateStatistics, 500);
+  updateNavUser();
+
+  // Анимация вращения профиля при наведении
+  const profileBlock = document.getElementById('profile-floating-block');
+  if (profileBlock) {
+    profileBlock.addEventListener('mouseenter', function() {
+      profileBlock.classList.add('spin');
+    });
+    profileBlock.addEventListener('animationend', function() {
+      profileBlock.classList.remove('spin');
+    });
+  }
+
+  const modalPhotoInput = document.getElementById('modal-photo');
+  const modalPhotoPreview = document.getElementById('modal-photo-preview');
+  const navUserPhoto = document.getElementById('nav-user-photo');
+  const profilePhoto = document.getElementById('profile-photo');
+  window.photoChanged = false;
+  window.newPhotoData = '';
+
+  if (modalPhotoInput) {
+    modalPhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          if (modalPhotoPreview) modalPhotoPreview.src = ev.target.result;
+          if (profilePhoto) profilePhoto.src = ev.target.result;
+          if (navUserPhoto) navUserPhoto.src = ev.target.result;
+          localStorage.setItem('userPhoto', ev.target.result);
+          window.photoChanged = true;
+          window.newPhotoData = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  updateProfileHeader();
+  const profileModal = document.getElementById('profile-modal');
+  if (profileModal) {
+    profileModal.addEventListener('click', function(e) {
+      if (e.target === profileModal) {
+        closeProfileModal();
+      }
+    });
+  }
+});
+
+// Populate roles section
+function populateRoles() {
+  const rolesGrid = document.getElementById('rolesGrid');
+  if (!rolesGrid) return;
+  
+  rolesGrid.innerHTML = '';
+  
+  appData.roles.forEach((role, index) => {
+    const roleCard = document.createElement('div');
+    roleCard.className = 'role-card';
+    roleCard.style.animationDelay = `${index * 0.1}s`;
+    
+    roleCard.innerHTML = `
+      <div class="role-header">
+        <div>
+          <div class="role-name">${role.name}</div>
+          <div class="role-title">${role.title}</div>
+        </div>
+        <div class="role-badge">${role.progress}%</div>
+      </div>
+      <div class="role-stats">
+        <div class="role-stat">
+          <div class="role-stat-value">${role.modules}</div>
+          <div class="role-stat-label">Модулей</div>
+        </div>
+        <div class="role-stat">
+          <div class="role-stat-value">${role.hours}</div>
+          <div class="role-stat-label">Часов</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%; background-color: ${role.color}"></div>
+      </div>
+      <div class="progress-text">${role.progress}% завершено</div>
+    `;
+    
+    rolesGrid.appendChild(roleCard);
+    
+    // Animate progress bar
+    setTimeout(() => {
+      const progressFill = roleCard.querySelector('.progress-fill');
+      if (progressFill) {
+        progressFill.style.width = `${role.progress}%`;
+      }
+    }, 500 + index * 100);
+  });
+}
+
+// Populate levels section
+function populateLevels() {
+  const levelsGrid = document.getElementById('levelsGrid');
+  if (!levelsGrid) return;
+  
+  levelsGrid.innerHTML = '';
+  
+  appData.levels.forEach((level, index) => {
+    const levelCard = document.createElement('div');
+    levelCard.className = 'level-card';
+    levelCard.style.animationDelay = `${index * 0.1}s`;
+    
+    levelCard.innerHTML = `
+      <div class="level-icon" style="background-color: ${level.color}">
+        ${index + 1}
+      </div>
+      <div class="level-name">${level.name}</div>
+      <div class="level-range">${level.range}</div>
+      <div class="level-points">${level.points.toLocaleString()} баллов</div>
+      <div class="level-description">${level.description}</div>
+    `;
+    
+    levelsGrid.appendChild(levelCard);
+  });
+}
+
+// Populate gamification elements
+function populateGamificationElements() {
+  // Populate badges
+  const badgesList = document.getElementById('badgesList');
+  if (badgesList) {
+    badgesList.innerHTML = '';
+    appData.gamification.badges.forEach((badge, index) => {
+      const badgeEl = document.createElement('div');
+      badgeEl.className = 'badge';
+      badgeEl.textContent = badge;
+      badgeEl.style.animationDelay = `${index * 0.1}s`;
+      badgesList.appendChild(badgeEl);
+    });
+  }
+  
+  // Populate challenges
+  const challengesList = document.getElementById('challengesList');
+  if (challengesList) {
+    challengesList.innerHTML = '';
+    appData.gamification.challenges.forEach((challenge, index) => {
+      const challengeEl = document.createElement('div');
+      challengeEl.className = 'challenge';
+      challengeEl.textContent = challenge;
+      challengeEl.style.animationDelay = `${index * 0.1}s`;
+      challengesList.appendChild(challengeEl);
+    });
+  }
+  
+  // Populate leaderboard
+  const leaderboard = document.getElementById('leaderboard');
+  if (leaderboard) {
+    leaderboard.innerHTML = '';
+    appData.gamification.leaderboard.forEach((user, index) => {
+      const userEl = document.createElement('div');
+      userEl.className = 'leaderboard-item';
+      userEl.style.animationDelay = `${index * 0.1}s`;
+      
+      userEl.innerHTML = `
+        <div class="leaderboard-rank">#${index + 1}</div>
+        <div class="leaderboard-name">
+          <div>${user.name}</div>
+          <div style="font-size: 0.8rem; color: #626C71;">${user.role} • ${user.level}</div>
+        </div>
+        <div class="leaderboard-points">${user.points.toLocaleString()} баллов</div>
+      `;
+      
+      leaderboard.appendChild(userEl);
+    });
+  }
+}
+
+// ROI Calculator functionality
+function initializeROICalculator() {
+  const employeeCountInput = document.getElementById('employeeCount');
+  const hourlyRateInput = document.getElementById('hourlyRate');
+  
+  if (employeeCountInput && hourlyRateInput) {
+    employeeCountInput.addEventListener('input', calculateROI);
+    hourlyRateInput.addEventListener('input', calculateROI);
+    
+    // Initial calculation
+    calculateROI();
+  }
+}
+
+function calculateROI() {
+  const employeeCountInput = document.getElementById('employeeCount');
+  const hourlyRateInput = document.getElementById('hourlyRate');
+  const timeSavingsEl = document.getElementById('timeSavings');
+  const costSavingsEl = document.getElementById('costSavings');
+  const roiValueEl = document.getElementById('roiValue');
+  
+  if (!employeeCountInput || !hourlyRateInput || !timeSavingsEl || !costSavingsEl || !roiValueEl) {
+    return;
+  }
+  
+  const employeeCount = parseInt(employeeCountInput.value) || 0;
+  const hourlyRate = parseInt(hourlyRateInput.value) || 0;
+  
+  // Calculate time savings (55 days * 8 hours per day)
+  const timeSavingsHours = 55 * 8 * employeeCount;
+  
+  // Calculate cost savings
+  const costSavingsAmount = timeSavingsHours * hourlyRate;
+  
+  // Calculate ROI (assuming initial investment scales with employee count)
+  const investment = employeeCount * 5500; // 5.5k per employee
+  const roi = investment > 0 ? ((costSavingsAmount - investment) / investment * 100) : 0;
+  
+  // Update UI
+  timeSavingsEl.textContent = timeSavingsHours.toLocaleString() + ' часов';
+  costSavingsEl.textContent = costSavingsAmount.toLocaleString() + ' руб';
+  roiValueEl.textContent = Math.round(roi) + '%';
+}
+
+// Add interactive effects
+function addInteractiveEffects() {
+  // Add hover effects to cards
+  const cards = document.querySelectorAll('.role-card, .level-card, .element-card, .metric-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px)';
+      this.style.transition = 'transform 0.3s ease';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+    });
+  });
+  
+  // Add click effects to buttons
+  const buttons = document.querySelectorAll('.btn');
+  
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Create ripple effect
+      const ripple = document.createElement('span');
+      ripple.style.position = 'absolute';
+      ripple.style.borderRadius = '50%';
+      ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.animation = 'ripple 0.6s linear';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      ripple.style.width = '20px';
+      ripple.style.height = '20px';
+      ripple.style.marginLeft = '-10px';
+      ripple.style.marginTop = '-10px';
+      
+      this.style.position = 'relative';
+      this.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    });
+  });
+  
+  // Add intersection observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeInUp 0.8s ease-out';
+        entry.target.style.animationFillMode = 'both';
+      }
+    });
+  }, observerOptions);
+  
+  // Observe elements for animation
+  const animateElements = document.querySelectorAll('.role-card, .level-card, .element-card, .metric-card');
+  animateElements.forEach(element => {
+    observer.observe(element);
+  });
+}
+
+// Add dynamic statistics animation
+function animateStatistics() {
+  const statNumbers = document.querySelectorAll('.stat-number');
+  
+  statNumbers.forEach(stat => {
+    const text = stat.textContent;
+    const hasPercent = text.includes('%');
+    const hasArrow = text.includes('→');
+    
+    if (hasPercent && !hasArrow) {
+      const number = parseInt(text);
+      if (!isNaN(number)) {
+        animateCounter(stat, number, '%');
+      }
+    } else if (hasArrow) {
+      // Keep "145 → 90" format as is
+      stat.textContent = text;
+    } else {
+      const number = parseInt(text);
+      if (!isNaN(number)) {
+        animateCounter(stat, number, text.includes('%') ? '%' : '');
+      }
+    }
+  });
+}
+
+function animateCounter(element, targetValue, suffix = '') {
+  const startValue = 0;
+  const duration = 1000;
+  const startTime = performance.now();
+  
+  function updateCounter(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Easing function
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    const currentValue = startValue + (targetValue - startValue) * easeOut;
+    
+    element.textContent = Math.floor(currentValue) + suffix;
+    
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter);
+    }
+  }
+  
+  requestAnimationFrame(updateCounter);
+}
+
+// Add CSS animation keyframes dynamically
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+`;
+document.head.appendChild(style);
+
+// Add keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    const sections = ['home', 'roles', 'gamification', 'analytics'];
+    const activeSection = document.querySelector('.section.active');
+    const currentIndex = sections.indexOf(activeSection.id);
+    
+    let nextIndex;
+    if (e.key === 'ArrowRight') {
+      nextIndex = (currentIndex + 1) % sections.length;
+    } else {
+      nextIndex = (currentIndex - 1 + sections.length) % sections.length;
+    }
+    
+    switchToSection(sections[nextIndex]);
+  }
+});
+
+// Add smooth scrolling
+document.documentElement.style.scrollBehavior = 'smooth';
+
+ // Валидация email
+function isEmail(val) {
+  return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(val);
+}
+
+// Функция форматирования телефона
+function formatPhone(input) {
+  // Удаляем все нецифры
+  let digits = input.replace(/\D/g, '');
+  if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+  if (!digits.startsWith('7')) digits = '7' + digits;
+  digits = digits.slice(0, 11); // максимум 11 цифр
+  let formatted = '+7';
+  if (digits.length > 1) formatted += '-' + digits.slice(1, 4);
+  if (digits.length > 4) formatted += '-' + digits.slice(4, 7);
+  if (digits.length > 7) formatted += '-' + digits.slice(7, 9);
+  if (digits.length > 9) formatted += '-' + digits.slice(9, 11);
+  return formatted;
+}
+
+// Применяем форматирование к полям телефона
+const regPhone = document.getElementById('reg-phone');
+if (regPhone) {
+  regPhone.addEventListener('input', function() {
+    this.value = formatPhone(this.value);
+  });
+}
+
+const loginInput = document.getElementById('login');
+if (loginInput) {
+  loginInput.addEventListener('input', function() {
+    // Если ввод похож на телефон, форматируем
+    if (/^\d|^\+7|^8/.test(this.value)) {
+      this.value = formatPhone(this.value);
+    }
+  });
+}
+
+// --- Логин ---
+document.getElementById('login-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const val = loginInput.value.trim();
+  const pass = document.getElementById('password').value;
+  const errorDiv = document.getElementById('login-error');
+  if (!isEmail(val) && !/^[+7-8]\d{1,2}-\d{3}-\d{2}-\d{2}$/.test(val)) {
+    errorDiv.textContent = 'Введите корректный номер телефона или email';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  errorDiv.style.display = 'none';
+  try {
+    const response = await fetch('http://localhost:3001/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: val, password: pass })
+    });
+    const result = await response.json();
+    if (response.ok && result.success) {
+      localStorage.clear();
+      localStorage.setItem('isLoggedIn', '1');
+      // Всегда добавляем email в userData
+      localStorage.setItem('userData', JSON.stringify({ ...result.profile, email: result.email || val }));
+      if (result.profile.photo) {
+        localStorage.setItem('userPhoto', result.profile.photo);
+      }
+      document.getElementById('auth-page').style.display = 'none';
+      switchToSection('home');
+      updateProfileHeader();
+      updateNavUser();
+    } else {
+      errorDiv.textContent = result.error || 'Неверный логин или пароль';
+      errorDiv.style.display = 'block';
+    }
+  } catch (err) {
+    errorDiv.textContent = 'Ошибка соединения с сервером';
+    errorDiv.style.display = 'block';
+  }
+});
+
+// --- Восстановление пароля ---
+const resetContact = document.getElementById('reset-contact');
+resetContact.addEventListener('input', function() {
+  if (/\d/.test(this.value[0]) || this.value.startsWith('+') || this.value.startsWith('8')) {
+    this.value = formatPhone(this.value);
+  }
+});
+
+document.getElementById('forgot-btn').onclick = function() {
+  document.getElementById('reset-modal').style.display = 'flex';
+};
+
+document.getElementById('close-modal').onclick = function() {
+  document.getElementById('reset-modal').style.display = 'none';
+  document.getElementById('reset-contact').value = '';
+  document.getElementById('reset-code').value = '';
+  document.getElementById('reset-code').style.display = 'none';
+  document.getElementById('confirm-code-btn').style.display = 'none';
+  document.getElementById('new-password').style.display = 'none';
+  document.getElementById('confirm-password').style.display = 'none';
+  document.getElementById('reset-login-btn').style.display = 'none';
+  document.getElementById('reset-error').style.display = 'none';
+};
+
+document.getElementById('reset-btn').onclick = function() {
+  const val = resetContact.value.trim();
+  const errorDiv = document.getElementById('reset-error');
+  if (!isEmail(val) && !/^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/.test(val)) {
+    errorDiv.textContent = 'Введите корректный номер телефона или email';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  errorDiv.style.display = 'none';
+  document.getElementById('reset-code').style.display = 'block';
+};
+
+const resetCode = document.getElementById('reset-code');
+resetCode.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 4);
+  if (this.value.length === 4) {
+    document.getElementById('confirm-code-btn').style.display = 'block';
+  } else {
+    document.getElementById('confirm-code-btn').style.display = 'none';
+  }
+});
+
+document.getElementById('confirm-code-btn').onclick = function() {
+  if (resetCode.value === '1234') { // Тестовый правильный код
+    document.getElementById('new-password').style.display = 'block';
+    document.getElementById('confirm-password').style.display = 'block';
+    document.getElementById('reset-login-btn').style.display = 'block';
+    document.getElementById('reset-error').style.display = 'none';
+    this.style.display = 'none';
+  } else {
+    document.getElementById('reset-error').textContent = 'Неверный код';
+    document.getElementById('reset-error').style.display = 'block';
+  }
+};
+
+document.getElementById('reset-login-btn').onclick = function() {
+  const newPass = document.getElementById('new-password').value;
+  const confPass = document.getElementById('confirm-password').value;
+  if (newPass && confPass && newPass === confPass) {
+    document.getElementById('reset-error').style.display = 'none';
+    document.getElementById('reset-modal').style.display = 'none';
+    document.getElementById('auth-page').style.display = 'none';
+    localStorage.setItem('isLoggedIn', '1');
+    switchToSection('home');
+  } else {
+    document.getElementById('reset-error').textContent = 'Пароли не совпадают';
+    document.getElementById('reset-error').style.display = 'block';
+  }
+};
+
+// --- Регистрация ---
+document.getElementById('register-btn').onclick = function() {
+  document.getElementById('auth-page').style.display = 'none';
+  document.getElementById('register-page').style.display = 'flex';
+};
+
+document.getElementById('register-cancel').onclick = function() {
+  document.getElementById('register-page').style.display = 'none';
+  document.getElementById('auth-page').style.display = 'flex';
+  document.getElementById('register-form').reset();
+  document.getElementById('register-error').style.display = 'none';
+};
+
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fname = document.getElementById('reg-firstname').value.trim();
+  const lname = document.getElementById('reg-lastname').value.trim();
+  const middlename = document.getElementById('reg-middlename').value.trim();
+  const birthdate = document.getElementById('reg-birthdate').value;
+  const company = document.getElementById('reg-company').value.trim();
+  const position = document.getElementById('reg-position').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const phone = regPhone.value.trim();
+  const pass = document.getElementById('reg-password').value;
+  const pass2 = document.getElementById('reg-password-confirm').value;
+  const errorDiv = document.getElementById('register-error');
+  const regPhotoInput = document.getElementById('reg-photo');
+
+  if (!fname || !lname || !company || !position || !email || !phone || !pass || !pass2) {
+    errorDiv.textContent = 'Пожалуйста, заполните все поля';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  if (!isEmail(email)) {
+    errorDiv.textContent = 'Введите корректную почту';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  if (!/^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/.test(phone)) {
+    errorDiv.textContent = 'Введите корректный номер телефона';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  if (pass !== pass2) {
+    errorDiv.textContent = 'Пароли не совпадают';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  errorDiv.style.display = 'none';
+
+  // --- ДОБАВЛЕНО: обработка фото ---
+  let photoData = '';
+  if (regPhotoInput && regPhotoInput.files && regPhotoInput.files[0]) {
+    const file = regPhotoInput.files[0];
+    photoData = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = function(ev) { resolve(ev.target.result); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Отправляем данные на сервер
+  try {
+    const response = await fetch('http://localhost:3001/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        password: pass,
+        firstname: fname,
+        lastname: lname,
+        middlename: middlename,
+        birthdate: birthdate,
+        company: company,
+        position: position,
+        phone: phone,
+        photo: photoData // <-- добавлено
+      })
+    });
+    const result = await response.json();
+    if (result.success) {
+      // После успешной регистрации сразу логиним пользователя
+      const loginResp = await fetch('http://localhost:3001/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: pass })
+      });
+      const loginResult = await loginResp.json();
+      if (loginResp.ok && loginResult.success) {
+        localStorage.clear();
+        localStorage.setItem('isLoggedIn', '1');
+        // Всегда добавляем email в userData
+        localStorage.setItem('userData', JSON.stringify({ ...loginResult.profile, email: email }));
+        if (loginResult.profile.photo) {
+          localStorage.setItem('userPhoto', loginResult.profile.photo);
+        }
+        document.getElementById('register-page').style.display = 'none';
+        document.getElementById('auth-page').style.display = 'none';
+        document.getElementById('register-form').reset();
+        switchToSection('profile-section');
+        updateProfileHeader();
+        updateNavUser();
+      } else {
+        alert('Регистрация успешна! Теперь войдите под своими данными.');
+        document.getElementById('register-page').style.display = 'none';
+        document.getElementById('auth-page').style.display = 'flex';
+        document.getElementById('register-form').reset();
+      }
+    } else {
+      errorDiv.textContent = result.error || 'Ошибка регистрации';
+      errorDiv.style.display = 'block';
+    }
+  } catch (err) {
+    errorDiv.textContent = 'Ошибка соединения с сервером';
+    errorDiv.style.display = 'block';
+  }
+});
+
+// Выход из системы
+document.getElementById('logout-btn').onclick = function() {
+  localStorage.clear();
+  document.getElementById('auth-page').style.display = 'flex';
+  switchToSection('home');
+  updateNavUser();
+};
+
+function updateProfileHeader() {
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  // Для шапки профиля (если есть)
+  const profileUsername = document.getElementById('profile-username');
+  const profileNameShort = document.getElementById('profile-name-short');
+  if (profileUsername) {
+    profileUsername.textContent =
+      userData.firstname && userData.lastname
+        ? userData.firstname + ' ' + userData.lastname
+        : '';
+  }
+  if (profileNameShort) {
+    profileNameShort.textContent =
+      userData.firstname && userData.lastname
+        ? userData.firstname + ' ' + userData.lastname
+        : 'Имя Фамилия';
+  }
+  const modulesCompleted = document.getElementById('modules-completed');
+  if (modulesCompleted) modulesCompleted.textContent = userData.completed || 12;
+  const progressValue = document.getElementById('progress-value');
+  if (progressValue) progressValue.textContent = (userData.progress || 85) + "%";
+  const profileProgress = document.getElementById('profile-progress');
+  if (profileProgress) profileProgress.style.width = (userData.progress || 85) + "%";
+
+  // Для плавающего блока профиля
+  const profileCompanyShort = document.getElementById('profile-company-short');
+  if (profileCompanyShort) profileCompanyShort.textContent = userData.company || 'Компания';
+  const profilePositionShort = document.getElementById('profile-position-short');
+  if (profilePositionShort) profilePositionShort.textContent = userData.position || 'Должность';
+  const profilePhotoFloating = document.getElementById('profile-photo-floating');
+  const profilePhoto = document.getElementById('profile-photo');
+  const photo = localStorage.getItem('userPhoto') || userData.photo;
+  if (profilePhotoFloating) profilePhotoFloating.src = photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+  if (profilePhoto) profilePhoto.src = photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+}
+
+function updateNavUser() {
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const navUserName = document.getElementById('nav-user-name');
+  const navUserPhoto = document.getElementById('nav-user-photo');
+  if (userData.firstname || userData.lastname) {
+    navUserName.textContent = (userData.firstname || '') + (userData.lastname ? ' ' + userData.lastname : '');
+  } else {
+    navUserName.textContent = 'Пользователь';
+  }
+  // Фото из localStorage (userPhoto) или userData.photo или дефолт
+  const photo = localStorage.getItem('userPhoto') || userData.photo;
+  if (photo) {
+    navUserPhoto.src = photo;
+  } else {
+    navUserPhoto.src = 'https://avatars.dicebear.com/api/personas/username.svg';
+  }
+}
+
+// --- ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ И ОТОБРАЖЕНИЯ ПРОФИЛЯ ---
+async function loadAndRenderProfile() {
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const email = userData.email;
+  if (!email) return;
+  try {
+    const res = await fetch('http://localhost:3001/api/profile?email=' + encodeURIComponent(email));
+    const data = await res.json();
+    if (!data.profile) throw new Error('Профиль не найден');
+    // Имя, фамилия, компания, должность
+    const nameShort = document.getElementById('profile-name-short');
+    if (nameShort) nameShort.textContent = (data.profile.firstname || '') + ' ' + (data.profile.lastname || '');
+    const companyShort = document.getElementById('profile-company-short');
+    if (companyShort) companyShort.textContent = data.profile.company || '';
+    const positionShort = document.getElementById('profile-position-short');
+    if (positionShort) positionShort.textContent = data.profile.position || '';
+    // Фото
+    const photo = data.profile.photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+    const photoFloating = document.getElementById('profile-photo-floating');
+    if (photoFloating) photoFloating.src = photo;
+    const navUserPhoto = document.getElementById('nav-user-photo');
+    if (navUserPhoto) navUserPhoto.src = photo;
+    const modalPhotoPreview = document.getElementById('modal-photo-preview');
+    if (modalPhotoPreview) modalPhotoPreview.src = photo;
+    // Имя в хедере
+    const navUserName = document.getElementById('nav-user-name');
+    if (navUserName) navUserName.textContent = (data.profile.firstname || '') + ' ' + (data.profile.lastname || '');
+    // ... можно добавить другие поля
+  } catch (e) {
+    alert('Ошибка при получении профиля: ' + e);
+  }
+}
+
+// --- Открытие редактора профиля ---
+async function openProfileModal() {
+  document.getElementById('profile-modal').style.display = 'flex';
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const email = userData.email;
+  if (!email) return;
+  try {
+    const res = await fetch('http://localhost:3001/api/profile?email=' + encodeURIComponent(email));
+    const data = await res.json();
+    if (!data.profile) throw new Error('Профиль не найден');
+    // Заполняем все текстовые поля
+    const profileFields = ['lastname','firstname','middlename','birthdate','company','position','phone'];
+    profileFields.forEach(key => {
+      const input = document.getElementById('modal-' + key);
+      if (input) input.value = data.profile[key] || '';
+    });
+    // Фото
+    const photoPreview = document.getElementById('modal-photo-preview');
+    if (photoPreview) {
+      if (data.profile.photo_path) {
+        photoPreview.src = data.profile.photo_path;
+      } else if (data.profile.photo) {
+        photoPreview.src = data.profile.photo;
+      } else {
+        photoPreview.src = 'https://avatars.dicebear.com/api/personas/username.svg';
+      }
+    }
+    // Email
+    const emailInput = document.getElementById('modal-email');
+    if (emailInput) emailInput.value = data.email || userData.email || '';
+    // Очистка полей нового пароля
+    const newPasswordInput = document.getElementById('modal-new-password');
+    const confirmPasswordInput = document.getElementById('modal-confirm-password');
+    if (newPasswordInput) newPasswordInput.value = '';
+    if (confirmPasswordInput) confirmPasswordInput.value = '';
+  } catch (e) {
+    alert('Ошибка при получении профиля: ' + e);
+  }
+}
+window.openProfileModal = openProfileModal;
+
+// --- Сохранение профиля ---
+document.getElementById('profile-form').onsubmit = async function(e) {
+  e.preventDefault();
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const email = userData.email;
+  if (!email) return;
+  // Собираем все значения из формы
+  const changedProfile = {
+    lastname: document.getElementById('modal-lastname').value,
+    firstname: document.getElementById('modal-firstname').value,
+    middlename: document.getElementById('modal-middlename').value,
+    birthdate: document.getElementById('modal-birthdate').value,
+    company: document.getElementById('modal-company').value,
+    position: document.getElementById('modal-position').value,
+    email: document.getElementById('modal-email').value,
+    phone: document.getElementById('modal-phone').value,
+    photo: document.getElementById('modal-photo-preview').src
+  };
+  const body = { email, profile: changedProfile };
+  const response = await fetch('http://localhost:3001/api/profile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const result = await response.json();
+  if (result.success) {
+    alert('Профиль успешно обновлён!');
+    closeProfileModal();
+    await loadAndRenderProfile(); // <-- сразу обновляем профиль с сервера
+  } else {
+    alert(result.error || 'Ошибка обновления профиля');
+  }
+};
+
+// --- Закрытие модального окна профиля ---
+function closeProfileModal() {
+  document.getElementById('profile-modal').style.display = 'none';
+}
+window.closeProfileModal = closeProfileModal;
+
+// Клик по фону (вне контента)
+const profileModal = document.getElementById('profile-modal');
+if (profileModal) {
+  profileModal.addEventListener('click', function(e) {
+    if (e.target === profileModal) {
+      closeProfileModal();
+    }
+  });
+}
+document.addEventListener('keydown', function(e) {
+  const profileModal = document.getElementById('profile-modal');
+  if (profileModal && profileModal.style.display === 'flex' && e.key === 'Escape') {
+    closeProfileModal();
+  }
+});
+
+// --- Загрузка фото профиля ---
+document.addEventListener('DOMContentLoaded', function() {
+  const modalPhotoInput = document.getElementById('modal-photo');
+  const modalPhotoPreview = document.getElementById('modal-photo-preview');
+  if (modalPhotoInput) {
+    modalPhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          if (modalPhotoPreview) modalPhotoPreview.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  loadAndRenderProfile(); // <-- при загрузке страницы сразу тянем профиль с сервера
+});
+
+// --- При выходе из аккаунта очищать userPhoto из localStorage ---
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function() {
+    localStorage.removeItem('userPhoto');
+  });
+}
+
+// --- Удаление профиля ---
+const deleteProfileBtn = document.getElementById('delete-profile-btn');
+const deleteProfileModal = document.getElementById('delete-profile-modal');
+const deleteProfileCancel = document.getElementById('delete-profile-cancel');
+const deleteProfileConfirm = document.getElementById('delete-profile-confirm');
+
+if (deleteProfileBtn && deleteProfileModal) {
+  deleteProfileBtn.onclick = function() {
+    deleteProfileModal.style.display = 'flex';
+  };
+}
+if (deleteProfileCancel && deleteProfileModal) {
+  deleteProfileCancel.onclick = function() {
+    deleteProfileModal.style.display = 'none';
+  };
+}
+if (deleteProfileConfirm) {
+  deleteProfileConfirm.onclick = async function() {
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const email = userData.email;
+    if (!email) return;
+    await fetch('http://localhost:3001/api/delete-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    localStorage.clear();
+    closeProfileModal(); // Закрываем модальное окно
+    window.location.href = 'index.html';
+  };
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('isLoggedIn') === '1') {
+    document.getElementById('auth-page').style.display = 'none';
+    switchToSection('home');
+  } else {
+    document.getElementById('auth-page').style.display = 'flex';
+  }
+  
+  updateProfileHeader();
+});
+
+// --- PARALLAX EFFECT ---
+window.addEventListener('scroll', function() {
+  const hero = document.getElementById('hero-video-section');
+  if (!hero) return;
+  const scrollY = window.scrollY;
+  hero.style.backgroundPositionY = `${scrollY * 0.18}px`;
+  // Testimonials parallax
+  const testimonials = document.getElementById('testimonials-section');
+  if (testimonials) {
+    testimonials.style.transform = `translateY(${scrollY * 0.08}px)`;
+  }
+});
+
+// --- BIM SVG ANIMATION (simple placeholder) ---
+(function() {
+  const svg = `<svg width="100%" height="100%" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,160L60,154.7C120,149,240,139,360,154.7C480,171,600,213,720,197.3C840,181,960,107,1080,101.3C1200,96,1320,160,1380,192L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" fill="#d32f2f" fill-opacity="0.18"><animate attributeName="d" dur="7s" repeatCount="indefinite" values="M0,160L60,154.7C120,149,240,139,360,154.7C480,171,600,213,720,197.3C840,181,960,107,1080,101.3C1200,96,1320,160,1380,192L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z;M0,192L60,186.7C120,181,240,171,360,186.7C480,203,600,245,720,229.3C840,213,960,139,1080,133.3C1200,128,1320,192,1380,224L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z;M0,160L60,154.7C120,149,240,139,360,154.7C480,171,600,213,720,197.3C840,181,960,107,1080,101.3C1200,96,1320,160,1380,192L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"/></path></svg>`;
+  const bg = document.getElementById('bim-anim-bg');
+  if (bg) bg.innerHTML = svg;
+})();
+
+// --- DEMO BUTTON ANIMATION ---
+const demoBtn = document.getElementById('demo-btn');
+if (demoBtn) {
+  demoBtn.addEventListener('mouseenter', function() {
+    demoBtn.classList.add('glow');
+  });
+  demoBtn.addEventListener('mouseleave', function() {
+    demoBtn.classList.remove('glow');
+  });
+  demoBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: document.getElementById('hero-video-section').offsetTop,
+      behavior: 'smooth'
+    });
+    // Можно заменить на открытие модального окна с видео-демо
+  });
+}
+
+// --- Анимация облёта кнопки "Смотреть демо" ---
+if (demoBtn) {
+  let animating = false;
+  demoBtn.addEventListener('mouseenter', function() {
+    if (animating) return;
+    animating = true;
+    demoBtn.classList.add('animating');
+  });
+  demoBtn.addEventListener('animationend', function() {
+    demoBtn.classList.remove('animating');
+    animating = false;
+  });
+}
+
+// --- PARTNERS MARQUEE AUTOSCROLL ---
+(function() {
+  const marquee = document.querySelector('.partners-marquee');
+  if (!marquee) return;
+  let scrollAmount = 0;
+  function animateMarquee() {
+    scrollAmount += 1.1;
+    if (scrollAmount > marquee.scrollWidth / 2) scrollAmount = 0;
+    marquee.style.transform = `translateX(-${scrollAmount}px)`;
+    requestAnimationFrame(animateMarquee);
+  }
+  animateMarquee();
+})();
+
+// Drag-scroll для ленты партнёров с автопаузой анимации
+window.addEventListener('DOMContentLoaded', () => {
+  const track = document.querySelector('.partners-marquee-track');
+  const marquee = track ? track.querySelector('.partners-marquee') : null;
+  if (!track || !marquee) return;
+
+  // Дублируем содержимое для бесшовности
+  if (!track.querySelector('.partners-marquee._clone')) {
+    const clone = marquee.cloneNode(true);
+    clone.classList.add('_clone');
+    track.appendChild(clone);
+  }
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let autoScroll = true;
+  let speed = 1.1; // px per frame
+
+  // Устанавливаем ширину ленты
+  function getContentWidth() {
+    return marquee.scrollWidth;
+  }
+
+  // Автопрокрутка
+  function animate() {
+    if (autoScroll && !isDown) {
+      track.scrollLeft += speed;
+      // Если дошли до конца первой копии — сбрасываем scrollLeft
+      if (track.scrollLeft >= getContentWidth()) {
+        track.scrollLeft -= getContentWidth();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Drag-scroll
+  track.addEventListener('mousedown', (e) => {
+    isDown = true;
+    autoScroll = false;
+    track.classList.add('active');
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+  });
+  track.addEventListener('mouseleave', () => {
+    isDown = false;
+    autoScroll = true;
+    track.classList.remove('active');
+  });
+  track.addEventListener('mouseup', () => {
+    isDown = false;
+    autoScroll = true;
+    track.classList.remove('active');
+  });
+  track.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.2; // чувствительность
+    track.scrollLeft = scrollLeft - walk;
+    // Бесшовность при drag
+    if (track.scrollLeft < 0) {
+      track.scrollLeft += getContentWidth();
+    } else if (track.scrollLeft >= getContentWidth()) {
+      track.scrollLeft -= getContentWidth();
+    }
+  });
+});
+
+// Drag-to-scroll для бегущей строки партнёров
+(function() {
+  const marqueeTrack = document.querySelector('.partners-marquee-track');
+  if (!marqueeTrack) return;
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  marqueeTrack.addEventListener('mousedown', (e) => {
+    isDown = true;
+    marqueeTrack.classList.add('dragging');
+    startX = e.pageX - marqueeTrack.offsetLeft;
+    scrollLeft = marqueeTrack.scrollLeft;
+  });
+  marqueeTrack.addEventListener('mouseleave', () => {
+    isDown = false;
+    marqueeTrack.classList.remove('dragging');
+  });
+  marqueeTrack.addEventListener('mouseup', () => {
+    isDown = false;
+    marqueeTrack.classList.remove('dragging');
+  });
+  marqueeTrack.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - marqueeTrack.offsetLeft;
+    const walk = (x - startX) * 1.2; // чувствительность
+    marqueeTrack.scrollLeft = scrollLeft - walk;
+  });
+})();
+
+// --- SOCIAL ICON MICROANIMATION ---
+document.querySelectorAll('.footer-social-icon').forEach(icon => {
+  icon.addEventListener('mouseenter', () => {
+    icon.classList.add('active');
+  });
+  icon.addEventListener('mouseleave', () => {
+    icon.classList.remove('active');
+  });
+});
+
+// --- SUBSCRIBE FORM ---
+const subscribeForm = document.getElementById('subscribe-form');
+if (subscribeForm) {
+  subscribeForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('subscribe-email').value;
+    if (email && email.includes('@')) {
+      alert('Спасибо за подписку!');
+      subscribeForm.reset();
+    } else {
+      alert('Пожалуйста, введите корректный e-mail.');
+    }
+  });
+}
+
+// --- DEMO VIDEO MODAL ---
+const demoModal = document.getElementById('demo-modal');
+const demoBtn2 = document.getElementById('demo-btn');
+const closeDemoModal = document.getElementById('close-demo-modal');
+const demoVideoFrame = document.getElementById('demo-video-frame');
+
+function openDemoModal() {
+  if (demoModal) {
+    demoModal.style.display = 'flex';
+    if (demoVideoFrame) {
+      demoVideoFrame.src = 'https://www.youtube.com/embed/2g811Eo7K8U?autoplay=1&rel=0';
+    }
+  }
+}
+function closeDemo() {
+  if (demoModal) demoModal.style.display = 'none';
+  if (demoVideoFrame) demoVideoFrame.src = '';
+}
+if (demoBtn2) {
+  demoBtn2.addEventListener('click', function(e) {
+    e.preventDefault();
+    openDemoModal();
+  });
+}
+if (closeDemoModal) closeDemoModal.addEventListener('click', closeDemo);
+if (demoModal) {
+  demoModal.addEventListener('click', function(e) {
+    if (e.target === demoModal) closeDemo();
+  });
+}
+
+// Показывать профиль только при переходе в личный кабинет
+function showProfileFloatingBlock(show) {
+  const block = document.getElementById('profile-floating-block');
+  if (!block) return;
+  if (show) {
+    block.style.display = 'flex';
+  } else {
+    block.style.display = 'none';
+  }
+}
+
+// --- Исправленный switchToSection ---
+window.switchToSection = function(sectionId, event) {
+  // Скрываем все секции и убираем active
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) targetSection.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  if (event && event.target && event.target.classList.contains('nav-item')) {
+    event.target.classList.add('active');
+  }
+  // Показываем/скрываем только профиль
+  if (sectionId === 'profile-section') {
+    showProfileFloatingBlock(true);
+  } else {
+    showProfileFloatingBlock(false);
+  }
+  updateProfileHeader();
+};
+
+// При загрузке страницы показываем профиль только если активен личный кабинет
+window.addEventListener('DOMContentLoaded', function() {
+  const activeSection = document.querySelector('.section.active');
+  showProfileFloatingBlock(activeSection && activeSection.id === 'profile-section');
+});
+
+// --- Загрузка фото профиля на сервер ---
+const profilePhotoUpload = document.getElementById('profile-photo-upload');
+if (profilePhotoUpload) {
+  profilePhotoUpload.addEventListener('change', async function() {
+    const file = profilePhotoUpload.files[0];
+    if (!file) return;
+    // Проверка типа
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('Поддерживаются только JPEG и PNG');
+      return;
+    }
+    // Проверка размера
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Максимальный размер файла 5 МБ');
+      return;
+    }
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (!userData.email) {
+      alert('Не удалось определить пользователя');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('email', userData.email);
+    formData.append('photo', file);
+    try {
+      const res = await fetch('http://localhost:3001/api/upload-photo', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Обновить фото в профиле
+        document.getElementById('profile-photo').src = data.photo_path;
+        if (document.getElementById('profile-photo-floating')) {
+          document.getElementById('profile-photo-floating').src = data.photo_path;
+        }
+        localStorage.setItem('userPhoto', data.photo_path);
+        alert('Фото успешно загружено!');
+      } else {
+        alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
+      }
+    } catch (e) {
+      alert('Ошибка загрузки файла');
+    }
+  });
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платформа обучения ICONA 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+
+</head>
+<body>
+  <!-- Авторизационный экран ICONA 2.0 -->
+<div id="auth-page" style="width:100vw; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#fff; position:fixed; top:0; left:0; z-index:9999;">
+  <h1 style="color:#d32f2f; font-size:2.5rem; margin-bottom:2rem; font-weight:700; letter-spacing:2px;">ICONA 2.0</h1>
+  <form id="login-form" style="display:flex; flex-direction:column; width:320px; gap:1rem; background:#fff; padding:2rem; border-radius:14px; box-shadow:0 4px 24px rgba(211,47,47,0.10);">
+    <input id="login" type="text" autocomplete="username" placeholder="введите ваш логин (почта или телефон)..." style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; color:#222;">
+    <input id="password" type="password" autocomplete="current-password" placeholder="Введите пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; color:#222;">
+    <button type="submit" style="padding:0.75rem; font-size:1.1rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;">Войти</button>
+    <button type="button" id="forgot-btn" style="background:none; border:none; color:#d32f2f; text-align:left; cursor:pointer; margin-top:0.5rem;">Забыли логин или пароль?</button>
+    <div id="login-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+    <button type="button" id="register-btn" style="background:none; border:none; color:#d32f2f; text-align:left; cursor:pointer; margin-top:1.5rem; font-weight:600;">Регистрация</button>
+  </form>
+</div>
+
+<!-- Модальное окно восстановления пароля -->
+<div id="reset-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#fff; align-items:center; justify-content:center; z-index:10000;">
+  <div style="background:#fff; padding:2rem; border-radius:14px; width:320px; display:flex; flex-direction:column; gap:1rem;">
+    <input id="reset-contact" type="text" placeholder="введите Ваш номер телефона или почту" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <button id="reset-btn" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer;">Сбросить пароль</button>
+    <input id="reset-code" type="text" maxlength="4" placeholder="введите код" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+    <button id="confirm-code-btn" style="display:none; padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer;">Подтвердить</button>
+    <input id="new-password" type="password" placeholder="Введите новый пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+    <input id="confirm-password" type="password" placeholder="Подтвердите новый пароль" style="padding:0.75rem; font-size:1rem; border:1.5px solid #d32f2f; border-radius:6px; display:none;">
+    <button id="reset-login-btn" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; cursor:pointer; display:none;">Войти</button>
+    <div id="reset-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+    <button id="close-modal" style="background:none; border:none; color:#d32f2f; cursor:pointer; margin-top:0.5rem;">Отмена</button>
+  </div>
+</div>
+
+<!-- Страница регистрации -->
+<div id="register-page" style="display:none; width:100vw; height:100vh; position:fixed; top:0; left:0; background:#fff; z-index:9999; align-items:center; justify-content:center;">
+  <form id="register-form" style="margin:auto; display:flex; flex-direction:column; width:340px; gap:1rem; background:#fff; padding:2rem; border-radius:14px; box-shadow:0 4px 24px rgba(211,47,47,0.10);">
+    <h2 style="color:#d32f2f; margin-bottom:1rem; text-align:center;">Регистрация</h2>
+    <input id="reg-firstname" type="text" placeholder="Имя" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-lastname" type="text" placeholder="Фамилия" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-middlename" type="text" placeholder="Отчество" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-birthdate" type="date" placeholder="Дата рождения" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-company" type="text" placeholder="Компания" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-position" type="text" placeholder="Должность" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-email" type="email" placeholder="Почта" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-phone" type="text" placeholder="Телефон" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-password" type="password" placeholder="Пароль" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <input id="reg-password-confirm" type="password" placeholder="Подтвердите пароль" style="padding:0.75rem; border:1.5px solid #d32f2f; border-radius:6px;">
+    <button type="submit" style="padding:0.75rem; background:#d32f2f; color:#fff; border:none; border-radius:6px; font-weight:600;">Зарегистрироваться</button>
+    <div id="register-error" style="color:#d32f2f; font-size:0.95rem; display:none;"></div>
+    <button type="button" id="register-cancel" style="background:none; border:none; color:#d32f2f; cursor:pointer; margin-top:0.5rem;">Отмена</button>
+  </form>
+</div>
+
+
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-container" style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="nav-brand" style="display:flex;flex-direction:column;align-items:flex-start;min-width:170px;">
+                    <h1 style="margin-bottom:0;line-height:1.1;">ICONA 2.0</h1>
+                    <span class="nav-subtitle" style="margin-top:0.1em;">Платформа обучения</span>
+                </div>
+                <!-- Строка поиска -->
+                <div class="nav-search search-container" style="flex:1;display:flex;justify-content:center;align-items:center;position:relative;">
+                    <input id="site-search" type="text" placeholder="Поиск по сайту..." style="width:320px;max-width:100%;padding:0.6em 2.2em 0.6em 1em;border:1.5px solid #d32f2f;border-radius:24px;font-size:1em;outline:none;box-shadow:none;">
+                    <span style="position:relative;right:32px;color:#d32f2f;font-size:1.2em;pointer-events:none;">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#d32f2f" stroke-width="2"/><line x1="14.4142" y1="14" x2="18" y2="17.5858" stroke="#d32f2f" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                  <div id="site-search-results" class="site-search-results hidden"></div>
+                </div>
+                <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
+                    <button class="nav-item active" onclick="switchToSection('home')">Главная</button>
+                    <button class="nav-item" onclick="switchToSection('roles')">Роли</button>
+                    <button class="nav-item" onclick="switchToSection('gamification')">Геймификация</button>
+                    <button class="nav-item" onclick="switchToSection('analytics')">Аналитика</button>
+                    <!-- Имя пользователя и аватар -->
+                    <div id="nav-user" style="display:flex;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;" onclick="switchToSection('profile-section')">
+                        <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);">
+                        <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
+                    </div>
+                    <button id="logout-btn" style="background:#d32f2f; color:#fff; border:none; border-radius:6px; padding:0.5rem 1.2rem; font-weight:600; cursor:pointer;">Выйти</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="container">
+                    <!-- Центрирующий обёртка для видео-героя -->
+                    <div class="hero-video-center-wrapper">
+                        <section id="hero-video-section" style="position:relative; min-height:70vh; overflow:hidden; background:#1a1a1a; display:flex; align-items:center; justify-content:center; flex-direction:column; border-radius:24px; box-shadow:0 8px 32px rgba(211,47,47,0.10); max-width:820px; margin:0 auto;">
+                          <video id="hero-bg-video" autoplay loop muted playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:brightness(0.45) grayscale(0.1);border-radius:24px;">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-construction-site-with-cranes-3976-large.mp4" type="video/mp4">
+                          </video>
+                          <div class="hero-overlay" style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;">
+                            <h1 class="hero-headline-accent" style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.7rem;font-weight:700;color:#fff;text-shadow:0 4px 32px #d32f2f99,0 1px 0 #d32f2f;letter-spacing:1.5px;text-align:center;max-width:700px;line-height:1.15;">Освоить ICONA — на <span style="color:#d32f2f;">38% быстрее</span>, чем стандартные курсы</h1>
+                            <button id="demo-btn" class="demo-btn-glow" style="margin-top:2.5rem;padding:1.1rem 2.7rem;font-size:1.25rem;font-family:'FKGroteskNeue',Inter,sans-serif;background:#d32f2f;color:#fff;border:none;border-radius:50px;box-shadow:0 0 0 0 #d32f2f;cursor:pointer;transition:box-shadow .25s;display:flex;align-items:center;gap:0.7em;position:relative;overflow:hidden;">
+                              <span class="demo-btn-text">Смотреть демо</span>
+                              <span class="demo-btn-play" style="display:inline-block;width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:18px solid #fff;margin-left:10px;transition:transform .25s;filter:drop-shadow(0 0 6px #d32f2f88);"></span>
+                            </button>
+                          </div>
+                          <div id="bim-anim-bg" style="position:absolute;z-index:1;bottom:0;left:0;width:100%;height:40vh;pointer-events:none;opacity:0.7;"></div>
+                        </section>
+                    </div>
+                    
+                    <div class="main-landing-blocks">
+                      <!-- 1. Яркий заголовок и краткое описание платформы -->
+                      <section class="main-hero-block" style="padding:48px 0 32px 0; text-align:center;">
+                        <h1 style="font-size:2.8rem; color:#d32f2f; font-weight:800; margin-bottom:0.7em;">ICONA 2.0 — обучение будущего</h1>
+                        <p style="font-size:1.35rem; color:#222; max-width:700px; margin:0 auto 1.2em auto;">Платформа для быстрого освоения строительного ПО с поддержкой наставников, геймификацией и реальными результатами. <b>Учитесь. Внедряйте. Растите.</b></p>
+                        <div style="font-size:1.1rem; color:#d32f2f; font-weight:600; margin-bottom:1.5em;">«Осваивай технологии быстрее — строй будущее с нами!»</div>
+                      </section>
+
+                      <!-- 2. О платформе -->
+                      <section class="about-platform-block" style="padding:32px 0; text-align:center; background:#fff8e1; border-radius:18px; margin-bottom:2.5em;">
+                        <h2 style="color:#d32f2f; font-size:2.1rem; font-weight:700; margin-bottom:0.7em;">О платформе</h2>
+                        <p style="font-size:1.15rem; color:#222; max-width:700px; margin:0 auto 1.2em auto;">Методика ICONA сочетает интерактивные задания, поддержку наставников и элементы геймификации для максимального вовлечения и роста навыков.</p>
+                        <ul style="display:flex;flex-wrap:wrap;gap:2.5em;justify-content:center;list-style:none;padding:0;margin:0 auto;max-width:900px;">
+                          <li><b>Геймификация</b> — учёба как игра</li>
+                          <li><b>Наставники</b> — поддержка 24/7</li>
+                          <li><b>Быстрый рост</b> — реальные кейсы</li>
+                          <li><b>Сертификация</b> — официальный результат</li>
+                        </ul>
+                      </section>
+
+                      <!-- 3. Каталог/витрина курсов -->
+                      <section class="courses-showcase-block" style="padding:32px 0;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; text-align:center; margin-bottom:1.2em;">Каталог курсов</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;">
+                          <div class="testimonial-card">
+                            <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">BIM для начинающих</h3>
+                            <p style="color:#fff; font-size:1.05rem;">Погружение в основы BIM и цифрового моделирования. Практика с реальными проектами.</p>
+                            <button class="btn btn--primary" style="margin-top:1em;">Подробнее</button>
+                          </div>
+                          <div class="testimonial-card">
+                            <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Автоматизация процессов</h3>
+                            <p style="color:#fff; font-size:1.05rem;">Узнайте, как ускорить работу с помощью современных инструментов и скриптов.</p>
+                            <button class="btn btn--primary" style="margin-top:1em;">Подробнее</button>
+                          </div>
+                          <div class="testimonial-card">
+                            <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Управление проектами</h3>
+                            <p style="color:#fff; font-size:1.05rem;">Эффективное планирование, контроль и сдача строительных объектов в срок.</p>
+                            <button class="btn btn--primary" style="margin-top:1em;">Подробнее</button>
+                          </div>
+                        </div>
+                        <div style="margin-top:2em;text-align:center;">
+                          <input type="text" placeholder="Поиск по курсам..." style="padding:0.7em 1.5em; border-radius:8px; border:1.5px solid #d32f2f; font-size:1.05em; min-width:220px;">
+                          <button class="btn btn--outline" style="margin-left:0.7em;">Фильтры</button>
+                        </div>
+                      </section>
+
+                      <!-- 4. Реальные отзывы и истории успеха -->
+                      <section class="success-stories-block" style="padding:32px 0; background:none; border-radius:0; margin-bottom:2.5em;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; text-align:center; margin-bottom:1.2em;">Истории успеха</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;">
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">«После ICONA я получил повышение и стал руководителем BIM-группы»</div>
+                            <div style="color:#fff9; font-size:0.98em;">— Сергей, BIM-координатор</div>
+                          </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">«Наш отдел внедрил ICONA и сократил сроки сдачи объектов на 30%»</div>
+                            <div style="color:#fff9; font-size:0.98em;">— Анна, Руководитель проектов</div>
+                          </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">«Благодаря платформе я прошёл сертификацию и нашёл работу мечты»</div>
+                            <div style="color:#fff9; font-size:0.98em;">— Дмитрий, Инженер</div>
+                          </div>
+                        </div>
+                        <div style="margin-top:2em;text-align:center; color:#d32f2f; font-weight:600; font-size:1.1em;">> 2000 выпускников • 500+ компаний • ROI до 500%</div>
+                      </section>
+
+                      <!-- 5. Почему выбирают нас -->
+                      <section class="why-us-block" style="padding:32px 0; text-align:center;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; margin-bottom:1.2em;">Почему выбирают ICONA?</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;">
+                          <div style="flex:1 1 120px;min-width:120px;max-width:180px;display:flex;flex-direction:column;align-items:center;gap:0.7em;">
+                            <img src="time.svg" alt="Гибкий график" style="height:48px;width:auto;">
+                            <span style="font-size:1.05em;">Гибкий график</span>
+                          </div>
+                          <div style="flex:1 1 120px;min-width:120px;max-width:180px;display:flex;flex-direction:column;align-items:center;gap:0.7em;">
+                            <img src="mentors.svg" alt="Наставники 24/7" style="height:48px;width:auto;">
+                            <span style="font-size:1.05em;">Наставники 24/7</span>
+                          </div>
+                          <div style="flex:1 1 120px;min-width:120px;max-width:180px;display:flex;flex-direction:column;align-items:center;gap:0.7em;">
+                            <img src="mobile.svg" alt="Мобильное приложение" style="height:48px;width:auto;">
+                            <span style="font-size:1.05em;">Мобильное приложение</span>
+                          </div>
+                          <div style="flex:1 1 120px;min-width:120px;max-width:180px;display:flex;flex-direction:column;align-items:center;gap:0.7em;">
+                            <img src="support.svg" alt="Поддержка онлайн" style="height:48px;width:auto;">
+                            <span style="font-size:1.05em;">Поддержка онлайн</span>
+                          </div>
+                        </div>
+                      </section>
+
+                      <!-- 6. Кнопки быстрых действий (CTA) -->
+                      <section class="cta-block" style="padding:32px 0; text-align:center;">
+                        <button class="btn btn--primary" style="font-size:1.2em; padding:1em 2.5em; margin:0 1em 1em 0;">Начать обучение</button>
+                        <button class="btn btn--outline" style="font-size:1.2em; padding:1em 2.5em; margin:0 1em 1em 0;">Смотреть демо</button>
+                        <button class="btn btn--primary" style="font-size:1.2em; padding:1em 2.5em; margin:0 1em 1em 0; background:#fff; color:#d32f2f; border:2px solid #d32f2f;">Зарегистрироваться</button>
+                      </section>
+
+
+
+                      <!-- 8. FAQ -->
+                      <section class="faq-block" style="padding:32px 0;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; text-align:center; margin-bottom:1.2em;">Часто задаваемые вопросы</h2>
+                        <div class="faq-list">
+                          <div class="faq-item"><button class="faq-question" data-faq="faq1">Как проходит обучение?</button></div>
+                          <div class="faq-item"><button class="faq-question" data-faq="faq2">Есть ли сертификат?</button></div>
+                          <div class="faq-item"><button class="faq-question" data-faq="faq3">Можно ли учиться с телефона?</button></div>
+                          <div class="faq-item"><button class="faq-question" data-faq="faq4">Как получить поддержку?</button></div>
+                      </div>
+                    </section>
+
+                      <!-- Модальное окно FAQ -->
+                      <div id="faq-modal" class="faq-modal" style="display:none;">
+                        <div class="faq-modal-backdrop"></div>
+                        <div class="faq-modal-content">
+                          <span class="faq-modal-close">&times;</span>
+                          <div class="faq-modal-answer"></div>
+                                </div>
+                                </div>
+
+                      <script>
+                      const faqAnswers = {
+                        faq1: `Обучение на платформе ICONA проходит в интерактивном формате, что позволяет максимально вовлекаться в процесс. Каждый пользователь получает доступ к практическим заданиям, видеоурокам и симуляциям, которые имитируют реальные рабочие ситуации. В процессе обучения вас сопровождает персональный наставник, который отвечает на вопросы, помогает с трудными темами и мотивирует двигаться вперёд. Все задания ориентированы на применение знаний на практике, а прогресс отслеживается в личном кабинете.`,
+                        faq2: `Да, после успешного завершения курса вы получаете официальный сертификат ICONA. Сертификат подтверждает освоение ключевых компетенций и может быть использован для повышения квалификации, карьерного роста или предъявления работодателю. Документ содержит уникальный номер, защищён от подделки и доступен для скачивания в вашем профиле.`,
+                        faq3: `Да, вы можете проходить обучение с любого устройства: компьютер, планшет или смартфон. Платформа полностью адаптирована под мобильные экраны, все функции и материалы доступны без ограничений. Вы можете смотреть видеоуроки, выполнять задания и общаться с наставником даже в дороге или в командировке.`,
+                        faq4: `Поддержка доступна 24/7 через онлайн-чат на платформе, а также по электронной почте и в популярных мессенджерах (Telegram, WhatsApp, Viber). Вы можете задать вопрос по курсу, получить техническую помощь или консультацию по выбору программы. Ответ поступает максимально быстро, а сложные вопросы передаются профильным специалистам. Все обращения фиксируются в вашей истории поддержки.`
+                      };
+
+                      document.querySelectorAll('.faq-question').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                          const key = btn.getAttribute('data-faq');
+                          document.querySelector('.faq-modal-answer').textContent = faqAnswers[key];
+                          document.getElementById('faq-modal').style.display = 'flex';
+                        });
+                      });
+
+                      function closeFaqModal() {
+                        document.getElementById('faq-modal').style.display = 'none';
+                      }
+                      document.querySelector('.faq-modal-close').onclick = closeFaqModal;
+                      document.querySelector('.faq-modal-backdrop').onclick = closeFaqModal;
+                      document.addEventListener('keydown', function(e) {
+                        if(e.key === 'Escape') closeFaqModal();
+                      });
+                      </script>
+
+
+
+                      <!-- 10. Новости, мероприятия и блог -->
+                      <section class="news-block" style="padding:32px 0;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; text-align:center; margin-bottom:1.2em;">Новости и события</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;">
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">Вебинар: «BIM в 2024 году» — 15 мая</div>
+                            <div style="color:#fff9; font-size:0.98em;">Актуальные тренды и практики</div>
+                                </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">Запуск нового курса: «Автоматизация BIM»</div>
+                            <div style="color:#fff9; font-size:0.98em;">Старт 1 июня</div>
+                                </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">ICONA в СМИ: статья в «Эксперт»</div>
+                            <div style="color:#fff9; font-size:0.98em;">Апрель 2024</div>
+                            </div>
+                        </div>
+                      </section>
+
+
+                    
+
+
+                      <!-- Бонус: Квизы, тест-драйв, вдохновение -->
+                      <section class="bonus-block" style="padding:32px 0; text-align:center;">
+                        <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; margin-bottom:1.2em;">Бонус для новых пользователей</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;align-items:center;">
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">Пройдите бесплатный квиз и получите рекомендации по обучению</div>
+                          </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">Тест-драйв любого курса — бесплатно</div>
+                          </div>
+                          <div class="testimonial-card">
+                            <div style="font-size:1.1em; color:#fff; margin-bottom:0.5em;">Вдохновляйтесь: подборка лучших статей и лайфхаков</div>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                    <!-- /main-landing-blocks -->
+
+
+
+
+
+                     <!-- 9. Партнёры и соц.доказательства -->
+                    <section id="partners-marquee-section" style="background:#f8f8f8;padding:32px 0 0 0;overflow:hidden;max-width: 1200px;margin: 0 auto 48px auto;border-radius: 18px;box-shadow: 0 4px 24px rgba(211,47,47,0.10);">
+                      <div class="partners-marquee-track">
+                        <div class="partners-marquee">
+                          <div class="partner-item" style="display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+                            <img src="logo.jpg" alt="SetlGroup" class="partner-logo" />
+                            <span style="font-size:0.98em;color:#d32f2f;font-weight:600;">SetlGroup</span>
+                          </div>
+                          <div class="partner-item" style="display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+                            <img src="PNlogo.jpg" alt="Петербуржская недвижимость" class="partner-logo" />
+                            <span style="font-size:0.98em;color:#d32f2f;font-weight:600;">Петербуржская недвижимость</span>
+                          </div>
+                          <div class="partner-item" style="display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+                            <img src="SClogo.jpg" alt="SetlCity" class="partner-logo" />
+                            <span style="font-size:0.98em;color:#d32f2f;font-weight:600;">SetlCity</span>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+
+                </div>
+            </section>
+
+            <!-- Roles Section -->
+            <section id="roles" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Роли пользователей</h2>
+                        <p class="section-description">Персонализированное обучение для каждой роли в системе ICONA</p>
+                    </div>
+                    
+                    <div class="roles-grid" id="rolesGrid">
+                        <!-- Roles will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gamification Section -->
+            <section id="gamification" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Геймификация</h2>
+                        <p class="section-description">Система мотивации и прогрессии для эффективного обучения</p>
+                    </div>
+                    
+                    <div class="gamification-content">
+                        <div class="levels-section">
+                            <h3>Уровни прогрессии</h3>
+                            <div class="levels-grid" id="levelsGrid">
+                                <!-- Levels will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="gamification-elements">
+                            <div class="element-card">
+                                <h4>Достижения</h4>
+                                <div class="badges-list" id="badgesList">
+                                    <!-- Badges will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="element-card">
+                                <h4>Челленджи</h4>
+                                <div class="challenges-list" id="challengesList">
+                                    <!-- Challenges will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="element-card">
+                                <h4>Рейтинг</h4>
+                                <div class="leaderboard" id="leaderboard">
+                                    <!-- Leaderboard will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
+<!-- Личный кабинет -->
+<section id="profile-section" class="section" style="min-height:100vh; background:#f5f5f5; flex-direction:row; justify-content:center; align-items:flex-start; gap:150px; padding-top:150px;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:48px;">
+  <div class="dashboard-tiles-container" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:900px; width:100%; margin-bottom:0;">
+    <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Обучение</h2>
+<div class="dashboard-tiles-grid" style="display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr); gap:32px 32px;">
+        <div class="dashboard-tile" onclick="openTileModal('tile1')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:250px; min-height:220px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:900; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">5</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="8" y="12" width="32" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 20h16M16 28h10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Отчётность</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 обработка<br>+3 принято</div>
+        </div>
+        <div class="dashboard-tile" onclick="openTileModal('tile2')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Предписания</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 новое<br>22.12.16</div>
+        </div>
+        <div class="dashboard-tile" onclick="openTileModal('tile3')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 24l6 6 10-10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Уведомления</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">+1 новое<br>22.12.16</div>
+        </div>
+        <div class="dashboard-tile" onclick="openTileModal('tile4')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">6</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Сообщения</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 непрочитано<br>+4 всего</div>
+        </div>
+        <div class="dashboard-tile" onclick="openTileModal('tile5')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">2</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Документы</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">+2 новых<br>22.12.16</div>
+        </div>
+        <div class="dashboard-tile" onclick="openTileModal('tile6')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
+          <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">3</span>
+          <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Разъяснения</div>
+          <div style="color:#fff; font-size:0.99em; opacity:0.95;">2 периода<br>+3 новых</div>
+        </div>
+      </div>
+    </div>
+  <!-- Блок 'Ваши достижения' -->
+  <div class="achievements-list" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:540px; width:100%; margin-top:40px;">
+    <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Ваши достижения</h2>
+    <div style="width:100%; display:flex; flex-direction:column; gap:18px;">
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff8e1; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">1 этап: Знакомство с ПО</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">75%</span>
+        <img src="gold_medal.svg" alt="Золотая медаль" style="width:32px; height:32px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#f4f6f8; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">2 этап: Основы моделирования</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">62%</span>
+        <img src="silver_medal.svg" alt="Серебряная медаль" style="width:50px; height:50px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">3 этап: Расширенные функции</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">48%</span>
+        <img src="bronze_medal.svg" alt="Бронзовая медаль" style="width:50px; height:50px;">
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">4 этап: Работа с проектами</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">5 этап: Оптимизация и производительность</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">6 этап: Сотрудничество и обмен данными</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        
+      </div>
+      <div class="achievement-row" style="display:flex; align-items:center; justify-content:space-between; background:#fbeee0; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:1.1em 1.5em;">
+        <span style="font-size:1.08em; color:#222; font-weight:600;">7 этап: Сертификация и продвинутые темы</span>
+        <span style="font-size:1.08em; color:#d32f2f; font-weight:700;">0%</span>
+        <
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Профиль -->
+    <div id="profile-floating-block" class="profile-floating-block" style="position:sticky; top:35px; align-self:flex-start; background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; padding:2.1em 2.5em; min-width:290px; max-width:340px; display:flex; flex-direction:column; align-items:center; border:2px solid #d32f2f;">
+      <img id="profile-photo-floating" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Фото пользователя" style="width:82px;height:82px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 2px 12px #d32f2f22;margin-bottom:1.1em; border:2.5px solid #d32f2f;">
+      <div style="font-size:1.18em;font-weight:700;color:#2d2d2d;margin-bottom:0.2em;" id="profile-name-short">Имя Фамилия</div>
+      <div style="color:#888;font-size:1.01em;margin-bottom:0.2em;" id="profile-company-short">Компания</div>
+      <div style="color:#b71c1c;font-size:1.01em;" id="profile-position-short">Должность</div>
+      <button onclick="openProfileModal()" style="margin-top:1.1em;background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 1.7em;font-weight:600;cursor:pointer;width:100%;font-size:1.01em;">Открыть профиль</button>
+      <button onclick="logout()" style="margin-top:0.7em;background:none;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:24px;padding:0.5em 1.7em;font-weight:600;cursor:pointer;width:100%;font-size:0.98em;">Выйти</button>
+    <div style="margin-top:0.7em;color:#888;font-size:0.98em;width:100%;text-align:left;">
+      История загрузок<br>Мои подписки
+    </div>
+  </div>
+</section>
+
+<!-- Модальные окна для плиток -->
+<div id="tile-modal" class="modal" style="display:none;position:fixed;z-index:10011;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.15);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.5rem 2.5rem 2rem 2.5rem;min-width:340px;max-width:600px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;">
+    <span class="close" onclick="closeTileModal()" style="position:absolute;top:18px;right:24px;font-size:2.2rem;color:#d32f2f;cursor:pointer;">&times;</span>
+    <h2 id="tile-modal-title" style="color:#d32f2f;margin-bottom:1.5em;">Заглушка</h2>
+    <div id="tile-modal-content" style="color:#888;font-size:1.1em;">Заглушка: контент появится после запуска функционала.</div>
+  </div>
+</div>
+
+
+<!-- Модальное окно профиля -->
+<div id="profile-modal" class="modal" style="display:none;position:fixed;z-index:10001;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.15);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.5rem 2.5rem 2rem 2.5rem;min-width:340px;max-width:900px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;display:flex;flex-direction:row;gap:2.5rem;align-items:flex-start;">
+    <span class="close" onclick="closeProfileModal()" style="position:absolute;top:18px;right:24px;font-size:2.2rem;color:#d32f2f;cursor:pointer;">&times;</span>
+    <!-- Левая часть: аватар и кнопки -->
+    <div style="display:flex;flex-direction:column;align-items:center;min-width:220px;max-width:260px;flex:0 0 220px;">
+      <img id="modal-photo-preview" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Фото пользователя" style="width:160px;height:160px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 16px rgba(211,47,47,.10);margin-bottom:1.2em;">
+      <label for="modal-photo" style="display:flex;align-items:center;gap:0.5em;background:#fff;color:#d32f2f;border:1.5px solid #d32f2f;border-radius:24px;padding:0.7em 1.5em;font-weight:600;cursor:pointer;transition:background .18s, color .18s;margin-bottom:0.7em;">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z" stroke="#d32f2f" stroke-width="2"/><path d="M4 19V7a2 2 0 0 1 2-2h2.172a2 2 0 0 0 1.414-.586l.828-.828A2 2 0 0 1 12.828 3h2.344a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 18.828 5H21a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4Z" stroke="#d32f2f" stroke-width="2"/></svg>
+        Загрузить фото
+        <input type="file" id="modal-photo" accept="image/*" style="display:none;">
+      </label>
+      <button id="modal-photo-remove" style="background:none;border:1.5px solid #d32f2f;color:#d32f2f;border-radius:24px;padding:0.6em 1.5em;font-weight:600;cursor:pointer;transition:background .18s, color .18s;">Удалить</button>
+    </div>
+    <!-- Правая часть: форма -->
+    <form id="profile-form" style="flex:1;display:flex;flex-direction:column;gap:1.2em;">
+      <div style="display:flex;flex-wrap:wrap;gap:1.5em 2.5em;">
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Фамилия:<br><input type="text" id="modal-lastname" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Имя:<br><input type="text" id="modal-firstname" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Отчество:<br><input type="text" id="modal-middlename" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Дата рождения:<br><input type="date" id="modal-birthdate" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Компания:<br><input type="text" id="modal-company" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Должность:<br><input type="text" id="modal-position" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">e-mail:<br><input type="email" id="modal-email" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div style="flex:1 1 220px;min-width:180px;">
+          <label style="color:#b71c1c;font-size:0.98em;">Телефон:<br><input type="text" id="modal-phone" style="width:100%;padding:0.5em 0.8em;border:1.2px solid #d32f2f;border-radius:8px;font-size:1.08em;"></label>
+        </div>
+        <div class="modal-row">
+          <div class="modal-col">
+            <label for="modal-new-password">Новый пароль:</label>
+            <input type="password" id="modal-new-password" name="modal-new-password" placeholder="Новый пароль">
+          </div>
+          <div class="modal-col">
+            <label for="modal-confirm-password">Подтвердите новый пароль:</label>
+            <input type="password" id="modal-confirm-password" name="modal-confirm-password" placeholder="Подтвердите новый пароль">
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:row;gap:1.5em;justify-content:center;align-items:center;margin-top:2.2em;">
+        <button type="button" id="delete-profile-btn" class="modal-save delete-btn" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.9em 2.5em;font-size:1.15em;font-weight:600;cursor:pointer;box-shadow:0 2px 16px rgba(211,47,47,0.10);transition:background 0.2s, transform 0.18s;">
+          Удалить профиль
+        </button>
+        <button type="submit" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.9em 2.5em;font-size:1.15em;font-weight:600;cursor:pointer;box-shadow:0 2px 16px rgba(211,47,47,0.10);transition:background 0.2s, transform 0.18s;">
+          Сохранить изменения
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления профиля -->
+<div id="delete-profile-modal" class="modal" style="display:none;position:fixed;z-index:10010;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);align-items:center;justify-content:center;">
+  <div class="modal-content" style="background:#fff;border-radius:22px;padding:2.2rem 2.5rem;min-width:320px;max-width:400px;width:95vw;box-shadow:0 6px 32px rgba(211,47,47,0.18);position:relative;display:flex;flex-direction:column;align-items:center;">
+    <span style="font-size:1.25em;color:#d32f2f;font-weight:600;margin-bottom:1.2em;text-align:center;">Ваш профиль и все достижения будут удалены. Продолжить?</span>
+    <div style="display:flex;gap:1.5em;justify-content:center;margin-top:1.2em;">
+      <button id="delete-profile-cancel" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 2em;font-size:1.08em;font-weight:600;cursor:pointer;transition:background 0.2s, transform 0.18s;">Нет</button>
+      <button id="delete-profile-confirm" class="modal-save" style="background:#d32f2f;color:#fff;border:none;border-radius:24px;padding:0.7em 2em;font-size:1.08em;font-weight:600;cursor:pointer;transition:background 0.2s, transform 0.18s;">Да</button>
+    </div>
+  </div>
+</div>
+
+
+        </main>
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#about">О нас</a>
+    <a href="#blog">Блог</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+  <div class="footer-socials">
+    <!-- Telegram -->
+    <a href="https://web.telegram.org/a/#-1002560486414" target="_blank" rel="noopener" aria-label="Telegram" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <!-- SVG Telegram Logo -->
+      <svg width="26" height="26" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="25" fill="#229ED9"/>
+        <path d="M37.5 15.5L32.5 36.5C32.5 36.5 31.5 38 30 37.5L22.5 31.5L19.5 34.5C19.5 34.5 19 35 18.5 34.5L19 28.5L32 18.5C32 18.5 32.5 18 32 17.5C31.5 17 30.5 17.5 30.5 17.5L15.5 23.5C15.5 23.5 14.5 24 15 25C15.5 26 16.5 25.5 16.5 25.5L22 23.5L28.5 28.5L30.5 20.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Telegram
+    </a>
+    <!-- Setltech.ru -->
+    <a href="https://setltech.ru/" target="_blank" rel="noopener" aria-label="SetlTech" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <img src="Setltech.svg" alt="SetlTech" width="32" height="22" style="vertical-align:middle;" />SetlTech</a>
+      
+    <!-- Setlgroup.ru -->
+    <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+        <img src="Setlgroup.svg" alt="SetlGroup" width="32" height="22" style="vertical-align:middle;" />SetlGroup</a>
+
+
+  </div>
+  <div class="footer-info">
+    SetlSoftIcona © 2025 · INFO@SETLTECH.RU · + 7 (812) 335-51-88
+  </div>
+</footer>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <script src="app.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const item = this.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      // Закрыть все остальные
+      document.querySelectorAll('.faq-item').forEach(i => {
+        if(i !== item) {
+          i.classList.remove('open');
+          i.querySelector('.faq-answer').style.display = 'none';
+        }
+      });
+      // Открыть/закрыть текущий
+      if(item.classList.contains('open')) {
+        item.classList.remove('open');
+        setTimeout(() => answer.style.display = 'none', 700);
+      } else {
+        answer.style.display = 'block';
+        setTimeout(() => item.classList.add('open'), 10);
+      }
+    });
+  });
+});
+</script>
+    <!-- Удаляю конфликтующую функцию switchToSection ниже -->
+</body>
+</html>

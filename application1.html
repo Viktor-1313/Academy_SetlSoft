@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICONA 2.0 — Приложения</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="application1.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <script>
+    (function(){
+      var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        window.location.href = 'index.html?auth=required';
+      } else {
+        document.addEventListener('DOMContentLoaded', function(){document.body.style.display='block';});
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="main-content">
+    <div class="app">
+      <!-- Хейдер: точная копия с главной -->
+      <nav class="nav">
+        <div class="nav-container" style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="nav-brand" style="display:flex;flex-direction:column;align-items:flex-start;min-width:170px;">
+            <h1 style="margin-bottom:0;line-height:1.1;">ICONA 2.0</h1>
+            <span class="nav-subtitle" style="margin-top:0.1em;">Платформа обучения</span>
+          </div>
+          <div class="nav-search" style="flex:1;display:flex;justify-content:center;align-items:center;">
+            <input id="site-search" type="text" placeholder="Поиск по сайту..." style="width:320px;max-width:100%;padding:0.6em 2.2em 0.6em 1em;border:1.5px solid #d32f2f;border-radius:24px;font-size:1em;outline:none;box-shadow:none;">
+            <span style="position:relative;right:32px;color:#d32f2f;font-size:1.2em;pointer-events:none;">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#d32f2f" stroke-width="2"/><line x1="14.4142" y1="14" x2="18" y2="17.5858" stroke="#d32f2f" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+          </div>
+          <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
+            <a class="nav-item" href="index.html">Главная</a>
+            <a class="nav-item" href="roles.html">Роли</a>
+            <a class="nav-item" href="engineer.html">Модули</a>
+            <a class="nav-item nav-item-active" href="application1.html">Приложения</a>
+            <div id="nav-user" style="display:none;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;">
+              <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);border:2px solid #d32f2f;">
+              <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
+            </div>
+            <button id="login-btn" style="background:#d32f2f; color:#fff; border:none; border-radius:6px; padding:0.5rem 1.2rem; font-weight:600; cursor:pointer;">Войти</button>
+          </div>
+        </div>
+      </nav>
+      <div style="width:100%;height:3px;background:#d32f2f;"></div>
+
+      <main class="apps-main">
+        <section class="apps-section">
+          <h1 class="apps-title">Скачать приложения ICONA</h1>
+          <div class="apps-list">
+            <div class="app-card">
+              <div class="app-card-header">Десктоп версия ICONA</div>
+              <div class="app-card-body">
+                <a class="app-download-btn" href="#" target="_blank">Скачать для Windows</a>
+                <div class="app-qr-placeholder">QR</div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="app-card-header">ICONA Mobile App #1</div>
+              <div class="app-card-body">
+                <a class="appstore-link" href="#" target="_blank">App Store</a>
+                <a class="googleplay-link" href="#" target="_blank">Google Play</a>
+                <div class="app-qr-placeholder">QR</div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="app-card-header">ICONA Mobile App #2</div>
+              <div class="app-card-body">
+                <a class="appstore-link" href="#" target="_blank">App Store</a>
+                <a class="googleplay-link" href="#" target="_blank">Google Play</a>
+                <div class="app-qr-placeholder">QR</div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="app-card-header">ICONA Mobile App #3</div>
+              <div class="app-card-body">
+                <a class="appstore-link" href="#" target="_blank">App Store</a>
+                <a class="googleplay-link" href="#" target="_blank">Google Play</a>
+                <div class="app-qr-placeholder">QR</div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="app-card-header">ICONA Mobile App #4</div>
+              <div class="app-card-body">
+                <a class="appstore-link" href="#" target="_blank">App Store</a>
+                <a class="googleplay-link" href="#" target="_blank">Google Play</a>
+                <div class="app-qr-placeholder">QR</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-links">
+          <a href="#about">О нас</a>
+          <a href="#blog">Блог</a>
+          <a href="#contacts">Контакты</a>
+        </div>
+        <div class="footer-socials">
+          <a href="https://web.telegram.org/a/#-1002560486414" target="_blank" rel="noopener" aria-label="Telegram">
+            <svg width="26" height="26" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="25" cy="25" r="25" fill="#229ED9"/>
+              <path d="M37.5 15.5L32.5 36.5C32.5 36.5 31.5 38 30 37.5L22.5 31.5L19.5 34.5C19.5 34.5 19 35 18.5 34.5L19 28.5L32 18.5C32 18.5 32.5 18 32 17.5C31.5 17 30.5 17.5 30.5 17.5L15.5 23.5C15.5 23.5 14.5 24 15 25C15.5 26 16.5 25.5 16.5 25.5L22 23.5L28.5 28.5L30.5 20.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Telegram
+          </a>
+          <a href="https://setltech.ru/" target="_blank" rel="noopener" aria-label="SetlTech">
+            <img src="Setltech.svg" alt="SetlTech" width="32" height="22" style="vertical-align:middle;" />SetlTech</a>
+          <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup">
+            <img src="Setlgroup.svg" alt="SetlGroup" width="32" height="22" style="vertical-align:middle;" />SetlGroup</a>
+        </div>
+        <div class="footer-info">
+          SetlSoftIcona © 2025 · INFO@SETLTECH.RU · + 7 (812) 335-51-88
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div id="auth-warning" style="display:none; position:fixed; top:24px; left:50%; transform:translateX(-50%); background:#fff; color:#d32f2f; border:2px solid #d32f2f; border-radius:8px; padding:1.2em 2.2em; font-weight:600; font-size:1.15em; z-index:9999; box-shadow:0 2px 16px #d32f2f22; text-align:center;">
+    Войдите или зарегистрируйтесь<br>
+    <button onclick="window.location.href='auth.html'" style="margin:1em 0.5em 0 0; background:#d32f2f; color:#fff; border:none; border-radius:6px; padding:0.5em 1.5em; font-weight:600; cursor:pointer;">Войти</button>
+    <button onclick="window.location.href='auth.html#register'" style="margin:1em 0 0 0; background:#fff; color:#d32f2f; border:2px solid #d32f2f; border-radius:6px; padding:0.5em 1.5em; font-weight:600; cursor:pointer;">Зарегистрироваться</button>
+  </div>
+  <script src="application1.js"></script>
+  <script src="main.js"></script>
+  <script>
+    function updateNavAuthState() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === '1';
+      const navUser = document.getElementById('nav-user');
+      const loginBtn = document.getElementById('login-btn');
+      if (isLoggedIn) {
+        if (navUser) navUser.style.display = 'flex';
+        if (loginBtn) loginBtn.style.display = 'none';
+      } else {
+        if (navUser) navUser.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'inline-block';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      updateNavAuthState();
+      var navUser = document.getElementById('nav-user');
+      if (navUser) {
+        navUser.addEventListener('click', function() {
+          window.location.href = 'profile.html';
+        });
+      }
+      window.addEventListener('focus', updateNavAuthState);
+    });
+  </script>
+
+<script>
+  function updateHeaderUserBlock() {
+    var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+    var navUser = document.getElementById('nav-user');
+    var loginBtn = document.getElementById('login-btn');
+    var navUserName = document.getElementById('nav-user-name');
+    var navUserPhoto = document.getElementById('nav-user-photo');
+    var userName = localStorage.getItem('userName');
+    if (!userName) {
+      try {
+        var userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        userName = ((userData.firstname || '') + ' ' + (userData.lastname || '')).trim();
+      } catch {}
+    }
+    if (!userName) userName = 'Пользователь';
+    if (isLoggedIn) {
+      if (navUser) navUser.style.display = 'flex';
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (navUserName) navUserName.textContent = userName;
+      if (navUserPhoto) navUserPhoto.src = localStorage.getItem('userPhoto') || 'https://avatars.dicebear.com/api/personas/username.svg';
+    } else {
+      if (navUser) navUser.style.display = 'none';
+      if (loginBtn) loginBtn.style.display = 'inline-block';
+    }
+  }
+  window.addEventListener('DOMContentLoaded', updateHeaderUserBlock);
+  window.addEventListener('focus', updateHeaderUserBlock);
+  var navUser = document.getElementById('nav-user');
+  if (navUser) {
+    navUser.addEventListener('click', function() {
+      window.location.href = 'profile.html';
+    });
+  }
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+    var main = document.getElementById('main-content');
+    var warn = document.getElementById('auth-warning');
+    if (isLoggedIn) {
+      if (main) main.style.display = 'block';
+      if (warn) warn.style.display = 'none';
+    } else {
+      if (main) main.style.display = 'none';
+      if (warn) warn.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html> 
