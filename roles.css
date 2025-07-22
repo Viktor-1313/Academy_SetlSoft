@@ -1,0 +1,161 @@
+/* ===== main.css styles start ===== */
+:root {
+  /* Colors */
+  --color-background: rgba(252, 252, 249, 1);
+  --color-surface: rgba(255, 255, 253, 1);
+  --color-text: rgba(19, 52, 59, 1);
+  --color-text-secondary: rgba(98, 108, 113, 1);
+  --color-primary: rgba(33, 128, 141, 1);
+  --color-primary-hover: rgba(29, 116, 128, 1);
+  --color-primary-active: rgba(26, 104, 115, 1);
+  --color-secondary: rgba(94, 82, 64, 0.12);
+  --color-secondary-hover: rgba(94, 82, 64, 0.2);
+  --color-secondary-active: rgba(94, 82, 64, 0.25);
+  --color-border: rgba(94, 82, 64, 0.2);
+  --color-btn-primary-text: rgba(252, 252, 249, 1);
+  --color-card-border: rgba(94, 82, 64, 0.12);
+  --color-card-border-inner: rgba(94, 82, 64, 0.12);
+  --color-error: rgba(192, 21, 47, 1);
+  --color-success: rgba(33, 128, 141, 1);
+  --color-warning: rgba(168, 75, 47, 1);
+  --color-info: rgba(98, 108, 113, 1);
+  --color-focus-ring: rgba(33, 128, 141, 0.4);
+  --color-select-caret: rgba(19, 52, 59, 0.8);
+  /* ... (остальной main.css) ... */
+}
+/* ===== main.css styles end ===== */
+
+/* ===== Стили для страницы ролей ===== */
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2em;
+  margin-top: 2.5em;
+}
+.role-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px #f7b7b711;
+  padding: 2em 1.5em 1.5em 1.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.18s, transform 0.16s;
+  border: 1.5px solid #f7b7b722;
+}
+.role-card:hover {
+  box-shadow: 0 8px 28px #f7b7b733;
+  transform: scale(1.03);
+}
+.role-header {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+.role-name {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #e57373;
+}
+.role-badge {
+  background: #ffeaea;
+  color: #e57373;
+  border-radius: 8px;
+  padding: 0.2em 0.8em;
+  font-size: 0.98em;
+  font-weight: 600;
+}
+.role-title {
+  font-size: 1.05em;
+  color: #444;
+  margin-bottom: 0.7em;
+}
+.role-stats {
+  display: flex;
+  gap: 1.5em;
+  margin-top: 1em;
+}
+.role-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.role-stat-value {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #e57373;
+}
+.role-stat-label {
+  font-size: 0.98em;
+  color: #bbb;
+}
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #f9f9fa;
+  border-radius: 6px;
+  margin-top: 0.5em;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e57373 60%, #ffe082 100%);
+  border-radius: 6px;
+  transition: width 0.4s;
+}
+.progress-text {
+  font-size: 0.95em;
+  color: #e57373;
+  margin-top: 0.3em;
+  font-weight: 600;
+}
+
+.main-content, .container, .module-overview, .module-hero {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.build-overview {
+  background: #fff;
+  border: 2.5px solid #d32f2f;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #d32f2f11;
+  padding: 2.2em 2.5em 2em 2.5em;
+  margin-bottom: 2.5em;
+  margin-top: 2.2em;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: box-shadow 0.18s, border-color 0.18s;
+}
+.build-overview:hover {
+  box-shadow: 0 8px 32px #d32f2f22;
+  border-color: #b71c1c;
+}
+
+.module-overview {
+  background: #fff;
+  border: 2.5px solid #d32f2f;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #d32f2f11;
+  padding: 2.2em 2.5em 2em 2.5em;
+  margin-bottom: 2.5em;
+  margin-top: 2.2em;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: box-shadow 0.18s, border-color 0.18s;
+}
+.module-overview:hover {
+  box-shadow: 0 8px 32px #d32f2f22;
+  border-color: #b71c1c;
+}
+
+@media (max-width: 768px) {
+  .roles-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2em;
+  }
+} 

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICONA 2.0 – Роли</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="roles.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+  .course-section-content { display: none; }
+  .course-section-content.active { display: block; }
+
+</style>
+  <script>
+    (function(){
+      var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        window.location.href = 'index.html?auth=required';
+      } else {
+        document.addEventListener('DOMContentLoaded', function(){document.body.style.display='block';});
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="main-content" style="display:none;">
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-container" style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="nav-brand" style="display:flex;flex-direction:column;align-items:flex-start;min-width:170px;">
+                    <h1 style="margin-bottom:0;line-height:1.1;">ICONA 2.0</h1>
+                    <span class="nav-subtitle" style="margin-top:0.1em;">Платформа обучения</span>
+                </div>
+                <div class="nav-search" style="flex:1;display:flex;justify-content:center;align-items:center;">
+                    <input id="site-search" type="text" placeholder="Поиск по сайту..." style="width:320px;max-width:100%;padding:0.6em 2.2em 0.6em 1em;border:1.5px solid #d32f2f;border-radius:24px;font-size:1em;outline:none;box-shadow:none;">
+                    <span style="position:relative;right:32px;color:#d32f2f;font-size:1.2em;pointer-events:none;">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#d32f2f" stroke-width="2"/><line x1="14.4142" y1="14" x2="18" y2="17.5858" stroke="#d32f2f" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                </div>
+                <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
+                    <a class="nav-item" href="index.html">Главная</a>
+                    <a class="nav-item nav-item-active" href="roles.html">Роли</a>
+                    <a class="nav-item" href="modules.html">Модули</a>
+                    <a class="nav-item" href="applications.html">Приложения</a>
+                    <div id="nav-user" style="display:none;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;">
+                        <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);border:2px solid #d32f2f;">
+                        <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
+                    </div>
+                    <button id="login-btn" style="background:#d32f2f; color:#fff; border:none; border-radius:6px; padding:0.5rem 1.2rem; font-weight:600; cursor:pointer;">Войти</button>
+                </div>
+            </div>
+        </nav>
+        <div style="width:100%;height:4px;background:#d32f2f;"></div>
+        <main class="main-content">
+            <!-- MODULE OVERVIEW PAGE -->
+            <div id="moduleOverviewPage" class="page">
+                <div class="container">
+                  <section class="courses-showcase-block" style="padding:32px 0; width:100vw; margin-left:calc(-50vw + 50%);">
+                    <h2 style="color:#d32f2f; font-size:2rem; font-weight:700; text-align:center; margin-bottom:1.2em;">Каталог ролей</h2>
+                    <div id="roles-catalog" style="display:flex;flex-wrap:wrap;gap:2.5em;padding:0 2vw;justify-content:center;width:100vw;">
+                      <!-- Карточка 1 -->
+                      <div class="testimonial-card role-card-accordion" data-role="build" style="min-width:340px;width:32vw;max-width:500px;cursor:pointer;">
+                        <div style="font-size:2.2em;margin-bottom:0.7em;">🏗️</div>
+                        <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Инженер по строительству</h3>
+                        <p style="color:#fff; font-size:1.05rem;">Организация, контроль и сопровождение строительных работ на объектах различного назначения.</p>
+                        <div style="display:flex;gap:1.2em;margin:1em 0 0.5em 0;">
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">⏱️ 45 мин</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">📊 Средний</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">🏆 Сертификат</span>
+                        </div>
+                        <button class="btn btn--primary" style="margin-top:1.2em;">Подробнее</button>
+                        <div class="role-functions-content" style="display:none;margin-top:1.5em;background:#fff8e1;border-radius:14px;padding:1.2em 1.2em 1em 1.2em;color:#222;">
+                          <div style="font-weight:700;color:#d32f2f;margin-bottom:0.7em;">Основные функции:</div>
+                          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.7em;">
+                            <li>Организация строительных процессов</li>
+                            <li>Контроль качества и сроков выполнения работ</li>
+                            <li>Ведение технической документации</li>
+                            <li>Взаимодействие с подрядчиками и заказчиком</li>
+                            <li>Проверка соответствия работ проекту и стандартам</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- Карточка 2 -->
+                      <div class="testimonial-card role-card-accordion" data-role="supervisor" style="min-width:340px;width:32vw;max-width:500px;cursor:pointer;">
+                        <div style="font-size:2.2em;margin-bottom:0.7em;">🔍</div>
+                        <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Инженер технического надзора</h3>
+                        <p style="color:#fff; font-size:1.05rem;">Контроль соблюдения строительных норм, стандартов и качества работ на объекте.</p>
+                        <div style="display:flex;gap:1.2em;margin:1em 0 0.5em 0;">
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">⏱️ 40 мин</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">📊 Продвинутый</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">🏆 Сертификат</span>
+                        </div>
+                        <button class="btn btn--primary" style="margin-top:1.2em;">Подробнее</button>
+                        <div class="role-functions-content" style="display:none;margin-top:1.5em;background:#fff8e1;border-radius:14px;padding:1.2em 1.2em 1em 1.2em;color:#222;">
+                          <div style="font-weight:700;color:#d32f2f;margin-bottom:0.7em;">Основные функции:</div>
+                          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.7em;">
+                            <li>Проведение технического надзора за строительством</li>
+                            <li>Проверка соответствия работ проектной документации</li>
+                            <li>Контроль устранения замечаний</li>
+                            <li>Ведение отчетности по надзору</li>
+                            <li>Взаимодействие с контролирующими органами</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- Карточка 3 -->
+                      <div class="testimonial-card role-card-accordion" data-role="independent" style="min-width:340px;width:32vw;max-width:500px;cursor:pointer;">
+                        <div style="font-size:2.2em;margin-bottom:0.7em;">🕵️‍♂️</div>
+                        <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Независимый контроль</h3>
+                        <p style="color:#fff; font-size:1.05rem;">Внешний аудит и независимая экспертиза качества строительных работ.</p>
+                        <div style="display:flex;gap:1.2em;margin:1em 0 0.5em 0;">
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">⏱️ 35 мин</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">📊 Средний</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">🏆 Сертификат</span>
+                        </div>
+                        <button class="btn btn--primary" style="margin-top:1.2em;">Подробнее</button>
+                        <div class="role-functions-content" style="display:none;margin-top:1.5em;background:#fff8e1;border-radius:14px;padding:1.2em 1.2em 1em 1.2em;color:#222;">
+                          <div style="font-weight:700;color:#d32f2f;margin-bottom:0.7em;">Основные функции:</div>
+                          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.7em;">
+                            <li>Проведение независимых экспертиз</li>
+                            <li>Анализ качества и безопасности работ</li>
+                            <li>Подготовка заключений и рекомендаций</li>
+                            <li>Взаимодействие с заказчиком и подрядчиками</li>
+                            <li>Контроль устранения выявленных нарушений</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- Карточка 4 -->
+                      <div class="testimonial-card role-card-accordion" data-role="planner" style="min-width:340px;width:32vw;max-width:500px;cursor:pointer;">
+                        <div style="font-size:2.2em;margin-bottom:0.7em;">📅</div>
+                        <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Планировщик</h3>
+                        <p style="color:#fff; font-size:1.05rem;">Планирование сроков, ресурсов и этапов реализации строительных проектов.</p>
+                        <div style="display:flex;gap:1.2em;margin:1em 0 0.5em 0;">
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">⏱️ 30 мин</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">📊 Базовый</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">🏆 Сертификат</span>
+                        </div>
+                        <button class="btn btn--primary" style="margin-top:1.2em;">Подробнее</button>
+                        <div class="role-functions-content" style="display:none;margin-top:1.5em;background:#fff8e1;border-radius:14px;padding:1.2em 1.2em 1em 1.2em;color:#222;">
+                          <div style="font-weight:700;color:#d32f2f;margin-bottom:0.7em;">Основные функции:</div>
+                          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.7em;">
+                            <li>Разработка графиков и планов работ</li>
+                            <li>Оптимизация использования ресурсов</li>
+                            <li>Контроль сроков выполнения этапов</li>
+                            <li>Ведение проектной документации</li>
+                            <li>Взаимодействие с командой проекта</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- Карточка 5 -->
+                      <div class="testimonial-card role-card-accordion" data-role="admin" style="min-width:340px;width:32vw;max-width:500px;cursor:pointer;">
+                        <div style="font-size:2.2em;margin-bottom:0.7em;">🗂️</div>
+                        <h3 style="color:#fff; font-size:1.25rem; font-weight:700;">Администратор</h3>
+                        <p style="color:#fff; font-size:1.05rem;">Организация документооборота, поддержка процессов и административное сопровождение проектов.</p>
+                        <div style="display:flex;gap:1.2em;margin:1em 0 0.5em 0;">
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">⏱️ 25 мин</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">📊 Базовый</span>
+                          <span style="background:#fff1;padding:0.4em 1em;border-radius:8px;color:#fff;">🏆 Сертификат</span>
+                        </div>
+                        <button class="btn btn--primary" style="margin-top:1.2em;">Подробнее</button>
+                        <div class="role-functions-content" style="display:none;margin-top:1.5em;background:#fff8e1;border-radius:14px;padding:1.2em 1.2em 1em 1.2em;color:#222;">
+                          <div style="font-weight:700;color:#d32f2f;margin-bottom:0.7em;">Основные функции:</div>
+                          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.7em;">
+                            <li>Ведение и организация документооборота</li>
+                            <li>Поддержка административных процессов</li>
+                            <li>Контроль исполнения поручений</li>
+                            <li>Взаимодействие с участниками проекта</li>
+                            <li>Обеспечение хранения и передачи информации</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+            </div>
+            <!-- Здесь должен быть модуль обучения (learningModule) с overview, разделами, вопросами, прогрессом и тестами -->
+            <!-- ... (сюда вставьте ваш learningModule и остальные страницы модуля) ... -->
+        </main>
+    </div>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#about">О нас</a>
+    <a href="#blog">Блог</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+  <div class="footer-socials">
+    <!-- Telegram -->
+    <a href="https://web.telegram.org/a/#-1002560486414" target="_blank" rel="noopener" aria-label="Telegram" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <!-- SVG Telegram Logo -->
+      <svg width="26" height="26" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="25" fill="#229ED9"/>
+        <path d="M37.5 15.5L32.5 36.5C32.5 36.5 31.5 38 30 37.5L22.5 31.5L19.5 34.5C19.5 34.5 19 35 18.5 34.5L19 28.5L32 18.5C32 18.5 32.5 18 32 17.5C31.5 17 30.5 17.5 30.5 17.5L15.5 23.5C15.5 23.5 14.5 24 15 25C15.5 26 16.5 25.5 16.5 25.5L22 23.5L28.5 28.5L30.5 20.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Telegram
+    </a>
+    <!-- Setltech.ru -->
+    <a href="https://setltech.ru/" target="_blank" rel="noopener" aria-label="SetlTech" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <img src="Setltech.svg" alt="SetlTech" width="32" height="22" style="vertical-align:middle;" />SetlTech</a>
+      
+    <!-- Setlgroup.ru -->
+    <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+      <a href="https://setlgroup.ru/" target="_blank" rel="noopener" aria-label="SetlGroup" style="display:inline-flex;align-items:center;gap:0.4em;">
+        <img src="Setlgroup.svg" alt="SetlGroup" width="32" height="22" style="vertical-align:middle;" />SetlGroup</a>
+
+
+  </div>
+  <div class="footer-info">
+    SetlSoftIcona © 2025 · INFO@SETLTECH.RU · + 7 (812) 335-51-88
+  </div>
+</footer>
+
+    <script src="roles.js"></script>
+    <script src="main.js"></script>
+  </div>
+  <div id="auth-warning" style="display:none; position:fixed; top:24px; left:50%; transform:translateX(-50%); background:#fff; color:#d32f2f; border:2px solid #d32f2f; border-radius:8px; padding:1.2em 2.2em; font-weight:600; font-size:1.15em; z-index:9999; box-shadow:0 2px 16px #d32f2f22; text-align:center;">
+    Войдите или зарегистрируйтесь<br>
+    <button onclick="window.location.href='auth.html'" style="margin:1em 0.5em 0 0; background:#d32f2f; color:#fff; border:none; border-radius:6px; padding:0.5em 1.5em; font-weight:600; cursor:pointer;">Войти</button>
+    <button onclick="window.location.href='auth.html#register'" style="margin:1em 0 0 0; background:#fff; color:#d32f2f; border:2px solid #d32f2f; border-radius:6px; padding:0.5em 1.5em; font-weight:600; cursor:pointer;">Зарегистрироваться</button>
+  </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+      var main = document.getElementById('main-content');
+      var warn = document.getElementById('auth-warning');
+      if (!isLoggedIn) {
+        if (main) main.style.display = 'none';
+        if (warn) warn.style.display = 'block';
+      } else {
+        if (main) main.style.display = 'block';
+        if (warn) warn.style.display = 'none';
+      }
+    });
+  </script>
+
+<script>
+  // Проверка авторизации и показ контента
+  window.addEventListener('DOMContentLoaded', function() {
+    // Проверяем авторизацию
+    var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+    var main = document.getElementById('main-content');
+    var warn = document.getElementById('auth-warning');
+    if (isLoggedIn) {
+      if (main) main.style.display = 'block';
+      if (warn) warn.style.display = 'none';
+    } else {
+      if (main) main.style.display = 'none';
+      if (warn) warn.style.display = 'block';
+    }
+  });
+
+  function updateHeaderUserBlock() {
+    var isLoggedIn = localStorage.getItem('isLoggedIn') === '1' || localStorage.getItem('isLoggedIn') === 'true';
+    var navUser = document.getElementById('nav-user');
+    var loginBtn = document.getElementById('login-btn');
+    var navUserName = document.getElementById('nav-user-name');
+    var navUserPhoto = document.getElementById('nav-user-photo');
+    var userName = localStorage.getItem('userName');
+    if (!userName) {
+      try {
+        var userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        userName = ((userData.firstname || '') + ' ' + (userData.lastname || '')).trim();
+      } catch {}
+    }
+    if (!userName) userName = 'Пользователь';
+    if (isLoggedIn) {
+      if (navUser) navUser.style.display = 'flex';
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (navUserName) navUserName.textContent = userName;
+      if (navUserPhoto) navUserPhoto.src = localStorage.getItem('userPhoto') || 'https://avatars.dicebear.com/api/personas/username.svg';
+    } else {
+      if (navUser) navUser.style.display = 'none';
+      if (loginBtn) loginBtn.style.display = 'inline-block';
+    }
+  }
+  window.addEventListener('DOMContentLoaded', updateHeaderUserBlock);
+  window.addEventListener('focus', updateHeaderUserBlock);
+  var navUser = document.getElementById('nav-user');
+  if (navUser) {
+    navUser.addEventListener('click', function() {
+      window.location.href = 'profile.html';
+    });
+  }
+</script>
+<script>
+  var navUser = document.getElementById('nav-user');
+  if (navUser) {
+    navUser.addEventListener('click', function() {
+      window.location.href = 'profile.html';
+    });
+  }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Переход по карточкам ролей
+  document.querySelectorAll('.role-card-accordion').forEach(card => {
+    card.addEventListener('click', function() {
+      const title = this.querySelector('h3')?.textContent?.trim();
+      if (title === 'Инженер по строительству') {
+        window.location.href = 'engineer.html';
+      } else if (title === 'Инженер технического надзора') {
+        window.location.href = 'technadzor.html';
+      } else if (title === 'Независимый контроль') {
+        window.location.href = 'independent-control.html';
+      } else if (title === 'Планировщик') {
+        window.location.href = 'planner.html';
+      } else if (title === 'Администратор') {
+        window.location.href = 'admin.html';
+      }
+      // Можно добавить другие переходы по аналогии
+    });
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('go-to-applications-btn');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      window.location.href = 'applications.html';
+    });
+  }
+});
+</script>
+</body>
+</html>
