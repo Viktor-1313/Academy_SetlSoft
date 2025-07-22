@@ -42,8 +42,8 @@
                 <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
                     <a class="nav-item" href="index.html">Главная</a>
                     <a class="nav-item nav-item-active" href="roles.html">Роли</a>
-                    <a class="nav-item" href="engineer.html">Модули</a>
-                    <a class="nav-item" href="application1.html">Приложения</a>
+                    <a class="nav-item" href="modules.html">Модули</a>
+                    <a class="nav-item" href="applications.html">Приложения</a>
                     <div id="nav-user" style="display:none;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;">
                         <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);border:2px solid #d32f2f;">
                         <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
@@ -311,6 +311,16 @@ document.addEventListener('DOMContentLoaded', function() {
       // Можно добавить другие переходы по аналогии
     });
   });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('go-to-applications-btn');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      window.location.href = 'applications.html';
+    });
+  }
 });
 </script>
 </body>

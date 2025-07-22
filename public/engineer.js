@@ -275,6 +275,198 @@ let testQuestions = [
     }
 ];
 
+// Данные о структуре курса
+const courseStructure = [
+    {
+        title: "Введение в СТК",
+        duration: "10 минут",
+        status: "completed"
+    },
+    {
+        title: "Типы связей в графике",
+        duration: "15 минут",
+        status: "in_progress"
+    },
+    {
+        title: "Настройка базовых связей",
+        duration: "20 минут",
+        status: "locked"
+    },
+    {
+        title: "Сложные связи и зависимости",
+        duration: "25 минут",
+        status: "locked"
+    },
+    {
+        title: "Оптимизация графика",
+        duration: "15 минут",
+        status: "locked"
+    },
+    {
+        title: "Итоговое тестирование",
+        duration: "10 минут",
+        status: "locked"
+    }
+];
+
+// Функция для отображения структуры курса
+function renderCourseStructure() {
+    const container = document.getElementById('courseStructure');
+    if (!container) return;
+
+    const html = courseStructure.map(section => `
+        <li class="course-section-item">
+            ${section.title}
+            <span class="duration">${section.duration}</span>
+        </li>
+    `).join('');
+
+    container.innerHTML = `<ul class="course-structure-list">${html}</ul>`;
+}
+
+// Добавляем стили для структуры курса
+const styles = `
+    .learning-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px;
+    }
+
+    .learning-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 32px;
+        margin-bottom: 48px;
+        padding: 32px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .learning-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+        align-items: start;
+    }
+
+    .content-block {
+        background: white;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .content-block h3 {
+        color: var(--color-text);
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 24px 0;
+    }
+
+    #keyPointsList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #keyPointsList li {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 12px;
+        color: var(--color-text);
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    #keyPointsList li::before {
+        content: "•";
+        position: absolute;
+        left: 8px;
+        color: #B31A1A;
+    }
+
+    .course-structure-list {
+        list-style: none;
+        padding: 0;
+        margin: 24px 0 0 0;
+    }
+
+    .course-section-item {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 12px;
+        color: var(--color-text);
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .course-section-item::before {
+        content: "•";
+        position: absolute;
+        left: 8px;
+        color: #B31A1A;
+    }
+
+    .duration {
+        color: #666;
+        font-size: 0.9em;
+        margin-left: 8px;
+    }
+
+    .progress-section {
+        margin-top: 32px;
+    }
+
+    .progress-section h3 {
+        margin-bottom: 16px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #B31A1A;
+        width: 50%;
+        transition: width 0.3s ease;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+`;
+
+// Обновляем HTML структуру
+document.addEventListener('DOMContentLoaded', function() {
+    // Оборачиваем основные блоки в content-block
+    const competenciesSection = document.querySelector('#keyPointsList').parentElement;
+    competenciesSection.classList.add('content-block');
+
+    const courseStructure = document.querySelector('#courseStructure').parentElement;
+    courseStructure.classList.add('content-block');
+
+    renderCourseStructure();
+});
+
+// Добавляем стили на страницу
+const styleSheet = document.createElement("style");
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    renderCourseStructure();
+});
+
 // Application state
 let currentSectionIndex = 0;
 let completedSections = new Set();
@@ -688,8 +880,14 @@ function updateNavigationButtons() {
     }
     
     if (nextBtn) {
-        const isLastSection = currentSectionIndex === courseData.sections.length - 1;
-        nextBtn.textContent = isLastSection ? "К финальному тесту →" : "Следующий раздел →";
+        // Проверяем, является ли текущий раздел итоговым тестом
+        const currentSection = courseData.sections[currentSectionIndex];
+        if (currentSection && currentSection.title === "Итоговый тест") {
+            nextBtn.style.display = "none";
+        } else {
+            nextBtn.style.display = "block";
+            nextBtn.textContent = "Следующий раздел →";
+        }
     }
 }
 
@@ -962,6 +1160,55 @@ function showCertificate(score) {
     }
     
     showPage("certificate");
+
+    // Добавляем анализ ответов
+    const answersAnalysis = document.getElementById('answersAnalysis');
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let analysisHTML = '';
+
+    testQuestions.forEach((question, index) => {
+        const userAnswer = testState.answers[index];
+        const isCorrect = userAnswer === question.correct;
+        
+        if (isCorrect) correctCount++;
+        else incorrectCount++;
+
+        analysisHTML += `
+            <div style="margin-bottom: 15px; padding: 10px; background: ${isCorrect ? '#e8f5e9' : '#ffebee'}; border-radius: 6px;">
+                <p style="margin: 0 0 8px 0; font-weight: 600;">Вопрос ${index + 1}:</p>
+                <p style="margin: 0 0 8px 0;">${question.question}</p>
+                <p style="margin: 0; color: ${isCorrect ? '#2e7d32' : '#c62828'};">
+                    ${isCorrect ? '✓ Верно' : '✗ Неверно'}<br>
+                    ${!isCorrect ? `Правильный ответ: ${question.options[question.correct]}` : ''}
+                </p>
+            </div>
+        `;
+    });
+
+    answersAnalysis.innerHTML = analysisHTML;
+    document.getElementById('correctAnswersCount').textContent = correctCount;
+    document.getElementById('incorrectAnswersCount').textContent = incorrectCount;
+
+    // --- Отправка прогресса после успешного теста ---
+    try {
+        let userData = {};
+        try { userData = JSON.parse(localStorage.getItem('userData') || '{}'); } catch {}
+        const email = userData.email;
+        if (email) {
+            fetch('http://localhost:3001/api/learning-progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    moduleId: 'planning', // id модуля
+                    progress: 100
+                })
+            });
+        }
+    } catch(e) {
+        console.error('Ошибка отправки прогресса:', e);
+    }
 }
 
 function downloadCertificate() {
@@ -1154,4 +1401,9 @@ function blockNavForGuests() {
 }
 document.addEventListener('DOMContentLoaded', blockNavForGuests);
 
-console.log("JavaScript loaded successfully"); 
+console.log("JavaScript loaded successfully");
+
+function toggleSection(header) {
+    const section = header.closest('.collapsible-section');
+    section.classList.toggle('active');
+} 

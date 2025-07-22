@@ -6,6 +6,7 @@ const Busboy = require('busboy');
 const app = express();
 const PORT = 3001;
 const USERS_FILE = path.join(__dirname, 'users.json');
+const MODULES_STRUCTURE_FILE = path.join(__dirname, 'modules_structure.json');
 
 // --- middlewares ---
 app.use(express.json({ limit: '10mb' })); // для JSON-тел
@@ -66,9 +67,28 @@ app.post('/api/profile', (req, res) => {
   if (idx === -1) {
     return res.status(404).json({ error: 'Пользователь не найден' });
   }
+
+  let emailChanged = false;
+  // Обновляем email, если он изменился
+  if (data.profile && data.profile.email && data.profile.email !== users[idx].email) {
+    // Проверяем, не занят ли новый email
+    if (users.some(u => u.email === data.profile.email)) {
+      return res.status(400).json({ error: 'Этот email уже используется' });
+    }
+    users[idx].email = data.profile.email;
+    emailChanged = true;
+  }
+
+  // Обновляем пароль, если он был передан
+  if (data.newPassword) {
+    users[idx].password = data.newPassword;
+  }
+
+  // Обновляем остальные данные профиля
   users[idx].profile = { ...users[idx].profile, ...data.profile };
+  
   writeUsers(users);
-  res.json({ success: true });
+  res.json({ success: true, emailChanged });
 });
 
 // Получение профиля
@@ -78,6 +98,18 @@ app.get('/api/profile', (req, res) => {
   const user = users.find(u => u.email === email);
   if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
   res.json(user);
+});
+
+// Вход пользователя
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  const users = readUsers();
+  const user = users.find(u => u.email === email && u.password === password);
+  if (user) {
+    res.json({ success: true, user: { email: user.email, profile: user.profile } });
+  } else {
+    res.status(401).json({ error: 'Неверные учетные данные' });
+  }
 });
 
 // Загрузка фото (base64) через /api/upload-photo
@@ -107,6 +139,63 @@ app.post('/api/upload-photo', (req, res) => {
     res.json({ success: true });
   });
   req.pipe(busboy);
+});
+
+// Удаление профиля
+app.post('/api/delete-profile', (req, res) => {
+    const { email } = req.body;
+    let users = readUsers();
+    const updatedUsers = users.filter(u => u.email !== email);
+    
+    if (users.length === updatedUsers.length) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+    
+    writeUsers(updatedUsers);
+    res.json({ success: true });
+});
+
+// --- API: структура модулей ---
+app.get('/api/modules-structure', (req, res) => {
+  if (!fs.existsSync(MODULES_STRUCTURE_FILE)) return res.status(404).json({ error: 'Нет структуры модулей' });
+  const structure = JSON.parse(fs.readFileSync(MODULES_STRUCTURE_FILE, 'utf8'));
+  res.json(structure);
+});
+
+// --- API: прогресс обучения пользователя ---
+// Получить прогресс
+app.get('/api/learning-progress', (req, res) => {
+  const { email } = req.query;
+  let users = readUsers();
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+  res.json({ learningProgress: user.learningProgress || {} });
+});
+// Обновить прогресс (модуль/раздел/курс)
+app.post('/api/learning-progress', (req, res) => {
+  const { email, moduleId, sectionId, courseId, progress } = req.body;
+  if (!email || !moduleId || typeof progress !== 'number') {
+    return res.status(400).json({ error: 'Некорректные данные' });
+  }
+  let users = readUsers();
+  const idx = users.findIndex(u => u.email === email);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Пользователь не найден' });
+  }
+  if (!users[idx].learningProgress) users[idx].learningProgress = {};
+  if (!users[idx].learningProgress[moduleId]) users[idx].learningProgress[moduleId] = { progress: 0, sections: {} };
+  if (sectionId) {
+    if (!users[idx].learningProgress[moduleId].sections[sectionId]) users[idx].learningProgress[moduleId].sections[sectionId] = { progress: 0, courses: {} };
+    if (courseId) {
+      users[idx].learningProgress[moduleId].sections[sectionId].courses[courseId] = progress;
+    } else {
+      users[idx].learningProgress[moduleId].sections[sectionId].progress = progress;
+    }
+  } else {
+    users[idx].learningProgress[moduleId].progress = progress;
+  }
+  writeUsers(users);
+  res.json({ success: true });
 });
 
 // 404 для остальных маршрутов

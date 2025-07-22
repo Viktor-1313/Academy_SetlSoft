@@ -1,1081 +1,607 @@
-// ICONA 2.0 Learning Platform - Construction Engineer Module
-// Application data from JSON. Changed to 'let' to allow loading from localStorage.
-let courseData = {
-    title: "Инженер по строительству",
-    totalSections: 6,
-    currentSection: 2,
-    progress: 33,
-    timeSpent: "45 минут",
-    sections: [
-        {
-            id: 1,
-            title: "Введение в профессию",
-            status: "completed",
-            type: "theory",
-            duration: "15 мин",
-            icon: "📖",
-            description: "Обзор профессии инженера по строительству, ключевые концепции и принципы работы.",
-            content: `
-                <div class="content-section">
-                    <h4>Ключевые аспекты профессии инженера по строительству</h4>
-                    <p>Профессия инженера по строительству — одна из самых ответственных и востребованных в индустрии. Этот специалист является центральной фигурой на всех этапах проекта, от замысла до сдачи объекта, гарантируя его качество, безопасность и соответствие нормативам.</p>
-                    
-                    <div class="key-points mt-24">
-                        <h5>Основные должностные обязанности:</h5>
-                        <ul>
-                            <li>Стратегическое планирование и координация всех этапов строительных работ.</li>
-                            <li>Многоуровневый контроль качества выполняемых работ и применяемых материалов.</li>
-                            <li>Разработка и внедрение мер по обеспечению техники безопасности на объекте.</li>
-                            <li>Эффективное управление строительной командой и подрядчиками.</li>
-                            <li>Ведение и архивация всей необходимой технической и отчетной документации.</li>
-                        </ul>
-                    </div>
-                    
-                    <h5 class="mt-24">Современные технологии в работе</h5>
-                    <p class="mt-16">Современные инженеры активно применяют передовые технологии, такие как BIM (Building Information Modeling), для создания цифровых информационных моделей зданий. Этот подход позволяет оптимизировать ресурсы, прогнозировать затраты и минимизировать риски на протяжении всего жизненного цикла объекта.</p>
-                    
-                    <div class="success-message mt-16">
-                        <strong>Ключевая ответственность:</strong> Инженер несет персональную ответственность за безопасность персонала и итоговое качество построенного объекта.
-                    </div>
-                </div>
-            `
-        },
-        {
-            id: 2,
-            title: "Основные функции инженера",
-            status: "current",
-            type: "video",
-            duration: "20 мин",
-            icon: "🎥",
-            description: "Детальное изучение основных функций и должностных обязанностей инженера в строительной отрасли.",
-            content: `
-                <div class="content-section">
-                    <h4>Видеоурок: Основные функции инженера</h4>
-                    <p>Этот видеоматериал посвящен детальному разбору ключевых функций и ежедневных задач, которые выполняет инженер на строительной площадке.</p>
-                    
-                    <div class="video-container">
-                        <video id="videoPlayer" controls style="display: none; width: 100%; max-height: 400px;"></video>
-                        <div id="videoPlaceholder" class="video-placeholder">
-                            <div class="video-placeholder-icon">🎥</div>
-                            <h4>Видео: Основные функции инженера</h4>
-                            <p>Нажмите на кнопку ниже, чтобы загрузить и посмотреть видео.</p>
-                            <input type="file" id="videoUpload" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
-                            <button class="play-button" onclick="document.getElementById('videoUpload').click()">📥 Загрузить видео</button>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-24">
-                        <h5>Ключевые моменты для запоминания:</h5>
-                        <ul>
-                            <li>Роль инженера в предпроектной подготовке и планировании.</li>
-                            <li>Методы эффективной координации работы подрядных организаций.</li>
-                            <li>Процедуры и чек-листы для осуществления контроля качества.</li>
-                            <li>Примеры использования цифровых инструментов для управления проектом.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-16">
-                        <details>
-                            <summary><strong>Текстовая расшифровка и конспект видео</strong></summary>
-                            <p class="mt-8">Для вашего удобства доступна полная текстовая версия видеоматериала. Используйте ее для повторения ключевых моментов и закрепления знаний.</p>
-                        </details>
-                    </div>
-                </div>
-            `
-        },
-        {
-            id: 3,
-            title: "Проектная документация",
-            status: "locked",
-            type: "interactive",
-            duration: "25 мин",
-            icon: "📋",
-            description: "Освоение практических навыков работы с проектной и технической документацией.",
-            content: `
-                <div class="content-section">
-                    <h4>Интерактивный модуль: Проектная документация</h4>
-                    <p>Этот раздел позволит вам на практике освоить структуру и состав проектной документации, а также научиться работать с основными ее видами.</p>
-                    
-                    <div class="interactive-demo">
-                        <h5>📋 Интерактивный симулятор: Конструктор документов</h5>
-                        <p>Изучите структуру проектной документации в интерактивном режиме и попробуйте самостоятельно составить техническое задание по предложенному кейсу.</p>
-                        <button class="demo-button" onclick="launchInteractiveDemo()">Запустить симулятор</button>
-                    </div>
-                    
-                    <div class="mt-24">
-                        <h5>Основные разделы проектной документации:</h5>
-                        <div class="practice-exercises">
-                            <div class="exercise-card">
-                                <h6>Раздел АР (Архитектурные решения)</h6>
-                                <p>Подробные планы, фасады, разрезы и визуализации объекта.</p>
-                                <button class="exercise-button" onclick="showDocumentExample('drawings')">Показать пример</button>
-                            </div>
-                            <div class="exercise-card">
-                                <h6>Раздел КР (Конструктивные решения)</h6>
-                                <p>Расчеты и чертежи несущих конструкций здания.</p>
-                                <button class="exercise-button" onclick="showDocumentExample('estimates')">Показать пример</button>
-                            </div>
-                            <div class="exercise-card">
-                                <h6>Сметная документация</h6>
-                                <p>Расчет полной стоимости строительства, включая материалы и работы.</p>
-                                <button class="exercise-button" onclick="showDocumentExample('specs')">Показать пример</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `
-        },
-        {
-            id: 4,
-            title: "Технический надзор",
-            status: "locked",
-            type: "theory",
-            duration: "18 мин",
-            icon: "🔍",
-            description: "Принципы и методы осуществления технического надзора и контроля качества строительных работ.",
-            content: `
-                <div class="content-section">
-                    <h4>Основы технического надзора в строительстве</h4>
-                    <p>Технический надзор — это комплекс экспертно-проверочных мероприятий, целью которых является обеспечение точного соблюдения проектных решений, сроков, бюджета, а также высоких стандартов качества строительных работ и материалов.</p>
-                    
-                    <div class="key-points mt-24">
-                        <h5>Ключевые задачи технического надзора:</h5>
-                        <ul>
-                            <li>Контроль соответствия работ утвержденной проектно-сметной документации и нормативным актам (СНиП, ГОСТ).</li>
-                            <li>Входной контроль качества строительных материалов, изделий и конструкций.</li>
-                            <li>Надзор за соблюдением технологий и последовательности выполнения строительных процессов.</li>
-                            <li>Освидетельствование и приемка скрытых работ и ответственных конструкций.</li>
-                            <li>Предотвращение, выявление и контроль устранения дефектов и нарушений.</li>
-                        </ul>
-                    </div>
-                    
-                    <h5 class="mt-24">Инструменты и документация</h5>
-                    <p class="mt-16">Инженер по технадзору использует как измерительные инструменты (нивелиры, теодолиты, дефектоскопы), так и методы лабораторного анализа. Основой его работы является ведение общего и специальных журналов работ, а также составление актов освидетельствования.</p>
-                    
-                    <div class="info-message mt-16">
-                        <strong>Важно:</strong> Эффективный технический надзор является гарантией долговечности, безопасности и экономической эффективности строительного проекта.
-                    </div>
-                </div>
-            `
-        },
-        {
-            id: 5,
-            title: "Практические задания",
-            status: "locked",
-            type: "practice",
-            duration: "30 мин",
-            icon: "🛠️",
-            description: "Применение теоретических знаний на практике через решение реальных кейсов и задач.",
-            content: `
-                <div class="content-section">
-                    <h4>Практикум: Практические задания</h4>
-                    <p>Закрепите полученные знания, выполнив несколько практических упражнений, основанных на реальных инженерных задачах.</p>
-                    
-                    <div class="practice-exercises">
-                        <div class="exercise-card">
-                            <h5>Задание 1: Анализ проектных чертежей</h5>
-                            <p>На основе предоставленного чертежа определите последовательность возведения конструктивных элементов здания и выявите возможные коллизии.</p>
-                            <button class="exercise-button" onclick="completeExercise(1)">Приступить к заданию</button>
-                        </div>
-                        <div class="exercise-card">
-                            <h5>Задание 2: Расчет объема материалов</h5>
-                            <p>Рассчитайте необходимое количество бетона (м³) для заливки монолитного фундамента размером 10x12 м, высотой 0.5 м.</p>
-                            <button class="exercise-button" onclick="completeExercise(2)">Приступить к заданию</button>
-                        </div>
-                        <div class="exercise-card">
-                            <h5>Задание 3: Оценка строительных рисков</h5>
-                            <p>Проанализируйте предложенный план производства работ и определите три ключевых риска, связанных с техникой безопасности.</p>
-                            <button class="exercise-button" onclick="completeExercise(3)">Приступить к заданию</button>
-                        </div>
-                    </div>
-                    
-                    <div class="success-message mt-24">
-                        <strong>Рекомендация:</strong> Перед началом работы над заданиями, рекомендуем повторить материалы предыдущих теоретических и видео-разделов.
-                    </div>
-                </div>
-            `
-        },
-        {
-            id: 6,
-            title: "Итоговый тест",
-            status: "locked",
-            type: "test",
-            duration: "15 мин",
-            icon: "📝",
-            description: "Комплексная проверка знаний, полученных в ходе изучения всего учебного модуля.",
-            content: `
-                <div class="content-section">
-                    <h4>Итоговый тест</h4>
-                    <p>Пришло время проверить и систематизировать ваши знания. Итоговый тест охватывает все ключевые темы, изученные в данном модуле.</p>
-                    
-                    <div class="test-info">
-                        <h5>Информация о тестировании:</h5>
-                        <ul>
-                            <li><strong>Формат:</strong> 3 вопроса с выбором одного правильного ответа.</li>
-                            <li><strong>Время на выполнение:</strong> 10 минут.</li>
-                            <li><strong>Проходной балл для сертификации:</strong> 80% правильных ответов.</li>
-                            <li><strong>Количество попыток:</strong> не ограничено.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-24">
-                        <button class="btn btn--primary btn--lg" onclick="startFinalTest()">Начать итоговое тестирование</button>
-                    </div>
-                </div>
-            `
-        }
-    ],
-    keyPoints: [
-        "Инженер отвечает за техническое планирование проектов",
-        "Контроль качества строительных работ",
-        "Составление проектной документации",
-        "Соблюдение норм безопасности"
-    ],
-    currentContent: {
-        title: "Основные функции инженера по строительству",
-        type: "video",
-        description: "В этом разделе мы изучим ключевые обязанности и функции инженера по строительству",
-        videoUrl: "demo-video.mp4",
-        duration: "12:34",
-        transcript: "Доступна текстовая расшифровка видео..."
-    }
-};
 
-// Test questions
-let testQuestions = [
-    {
-        question: "Какова главная обязанность инженера по строительству?",
-        options: [
-            "Проектирование зданий",
-            "Контроль строительных работ",
-            "Продажа недвижимости",
-            "Ремонт оборудования"
-        ],
-        correct: 1
-    },
-    {
-        question: "Что включает в себя технический надзор?",
-        options: [
-            "Только проверка документов",
-            "Контроль качества и безопасности",
-            "Финансовое планирование",
-            "Маркетинг проекта"
-        ],
-        correct: 1
-    },
-    {
-        question: "Какие документы составляет инженер по строительству?",
-        options: [
-            "Только рабочие чертежи",
-            "Проектную документацию и отчеты",
-            "Финансовые отчеты",
-            "Маркетинговые материалы"
-        ],
-        correct: 1
-    }
-];
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // --- Глобальные переменные ---
+  let photoChanged = false;
+  let newPhotoData = '';
 
-// Application state
-let currentSectionIndex = 0;
-let completedSections = new Set();
-let learningProgress = 0;
-let timeSpentMinutes = 0;
-let startTime = null;
+  // --- Утилиты ---
+  function isEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(val);
+  }
 
-// New global state for edit mode
-let isEditMode = false;
+  function formatPhone(input) {
+    let digits = input.replace(/\D/g, '');
+    if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+    if (!digits.startsWith('7')) digits = '7' + digits;
+    digits = digits.slice(0, 11);
+    let formatted = '+7';
+    if (digits.length > 1) formatted += '-' + digits.slice(1, 4);
+    if (digits.length > 4) formatted += '-' + digits.slice(4, 7);
+    if (digits.length > 7) formatted += '-' + digits.slice(7, 9);
+    if (digits.length > 9) formatted += '-' + digits.slice(9, 11);
+    return formatted;
+  }
 
-const testState = {
-    current: 0,
-    answers: Array(testQuestions.length).fill(null),
-    timer: null,
-    timeLeft: 600 // 10 minutes
-};
+  // --- Обновление UI ---
+  function updateProfileHeader() {
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const profileNameShort = document.getElementById('profile-name-short');
+    if(profileNameShort) profileNameShort.textContent = (userData.firstname || '') + ' ' + (userData.lastname || 'Имя Фамилия');
+    const profileUsername = document.getElementById('profile-username');
+    if(profileUsername) profileUsername.textContent = userData.email || '';
+    const profileCompanyShort = document.getElementById('profile-company-short');
+    if(profileCompanyShort) profileCompanyShort.textContent = userData.company || 'Компания';
+    const profilePositionShort = document.getElementById('profile-position-short');
+    if(profilePositionShort) profilePositionShort.textContent = userData.position || 'Должность';
+    const profilePhotoFloating = document.getElementById('profile-photo-floating');
+    const photo = localStorage.getItem('userPhoto') || userData.photo;
+    if(profilePhotoFloating) profilePhotoFloating.src = photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+  }
 
-// DOM elements - will be initialized after DOM is ready
-let pages = {};
+  function updateNavUser() {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const navUserName = document.getElementById('nav-user-name');
+      const navUserPhoto = document.getElementById('nav-user-photo');
+      if (navUserName) {
+          if (userData.firstname || userData.lastname) {
+              navUserName.textContent = (userData.firstname || '') + (userData.lastname ? ' ' + userData.lastname : '');
+          } else {
+              navUserName.textContent = 'Пользователь';
+          }
+      }
+      if(navUserPhoto) {
+          const photo = localStorage.getItem('userPhoto') || userData.photo;
+          navUserPhoto.src = photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+      }
+  }
 
-// Initialize application
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM Content Loaded - Initializing ICONA 2.0 Learning Platform");
-    
-    // Initialize pages object after DOM is ready
-    pages = {
-        overview: document.getElementById("moduleOverviewPage"),
-        learning: document.getElementById("learningPage"),
-        test: document.getElementById("testPage"),
-        certificate: document.getElementById("certificatePage")
-    };
-    
-    console.log("Pages found:", {
-        overview: !!pages.overview,
-        learning: !!pages.learning,
-        test: !!pages.test,
-        certificate: !!pages.certificate
+  // --- Модальное окно профиля ---
+  window.openProfileModal = function() {
+    const profileModal = document.getElementById('profile-modal');
+    if(profileModal) profileModal.style.display = 'flex';
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const email = userData.email;
+    if (!email) return;
+
+    fetch('http://localhost:3001/api/profile?email=' + encodeURIComponent(email))
+      .then(res => res.json())
+      .then(data => {
+        if (!data.profile) throw new Error('Профиль не найден');
+        Object.keys(data.profile).forEach(key => {
+          const input = document.getElementById('modal-' + key);
+          if (input) {
+            if (input.type === 'file') {
+              input.value = '';
+            } else {
+              input.value = data.profile[key] || '';
+            }
+          }
+        });
+        const emailInput = document.getElementById('modal-email');
+        if (emailInput) emailInput.value = data.email || userData.email || '';
+        const modalPhotoPreview = document.getElementById('modal-photo-preview');
+        const photo = data.profile.photo || '';
+        if(modalPhotoPreview) modalPhotoPreview.src = photo || 'https://avatars.dicebear.com/api/personas/username.svg';
+      })
+      .catch(e => {
+        alert('Ошибка при получении профиля: ' + e);
+      });
+  }
+
+  window.closeProfileModal = function() {
+    const profileModal = document.getElementById('profile-modal');
+    if(profileModal) profileModal.style.display = 'none';
+  }
+  
+  // --- Обработчики событий ---
+  const loginForm = document.getElementById('login-form');
+  if(loginForm) {
+      loginForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const loginInput = document.getElementById('login');
+          const val = loginInput.value.trim();
+          const pass = document.getElementById('password').value;
+          const errorDiv = document.getElementById('login-error');
+          const confirmMsgDiv = document.getElementById('email-confirm-message');
+          const resendBtn = document.getElementById('resend-confirm-btn');
+
+          if (!isEmail(val) && !/^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/.test(val)) {
+              if (errorDiv) {
+                  errorDiv.textContent = 'Введите корректный номер телефона или email';
+                  errorDiv.style.display = 'block';
+              }
+              return;
+          }
+
+          if (errorDiv) {
+              errorDiv.style.display = 'none';
+          }
+
+          try {
+              const response = await fetch('http://localhost:3001/api/login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: val, password: pass })
+              });
+              const result = await response.json();
+              if (response.ok && result.success) {
+                  localStorage.clear();
+                  localStorage.setItem('isLoggedIn', '1');
+                  localStorage.setItem('userData', JSON.stringify({ ...result.user.profile, email: result.user.email }));
+                  if (result.user.profile.photo) {
+                      localStorage.setItem('userPhoto', result.user.profile.photo);
+                  }
+                  window.location.href = 'index.html';
+              } else {
+                  if (result.error === 'Email не подтвержден') {
+                    if (confirmMsgDiv) {
+                      confirmMsgDiv.textContent = 'Ваш email не подтвержден. Проверьте почту и перейдите по ссылке.';
+                      confirmMsgDiv.style.display = 'block';
+                    }
+                    if (resendBtn) {
+                      resendBtn.style.display = 'inline-block';
+                      resendBtn.onclick = async function() {
+                        resendBtn.disabled = true;
+                        resendBtn.textContent = 'Отправка...';
+                        const resp = await fetch('http://localhost:3001/api/resend-confirmation', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email: val })
+                        });
+                        const data = await resp.json();
+                        if (resp.ok && data.success) {
+                          confirmMsgDiv.textContent = 'Письмо отправлено повторно. Проверьте почту.';
+                        } else {
+                          confirmMsgDiv.textContent = data.error || 'Ошибка отправки письма';
+                        }
+                        resendBtn.textContent = 'Отправить письмо повторно';
+                        resendBtn.disabled = true;
+                      };
+                    }
+                  } else {
+                    if (errorDiv) {
+                        errorDiv.textContent = result.error || 'Неверный логин или пароль';
+                        errorDiv.style.display = 'block';
+                    }
+                    if (confirmMsgDiv) confirmMsgDiv.style.display = 'none';
+                    if (resendBtn) resendBtn.style.display = 'none';
+                  }
+              }
+          } catch (err) {
+              if (errorDiv) {
+                  errorDiv.textContent = 'Ошибка соединения с сервером';
+                  errorDiv.style.display = 'block';
+              }
+          }
+      });
+  }
+  
+  // --- Сохранение фото при регистрации ---
+  let regPhotoBase64 = '';
+  const regPhotoInput = document.getElementById('reg-photo');
+  if (regPhotoInput) {
+    regPhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          regPhotoBase64 = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     });
-    
-    // Initialize the application
-    initializeApp();
-    attachEventListeners();
-    
-    addEditModeStyles(); // Add styles for edit mode
-    console.log("Application initialized successfully");
+  }
+
+  const regPhotoLabel = document.getElementById('reg-photo-label');
+  const regPhotoFilename = document.getElementById('reg-photo-filename');
+  if (regPhotoInput && regPhotoLabel && regPhotoFilename) {
+    regPhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      regPhotoFilename.textContent = file ? file.name : '';
+    });
+  }
+
+  const registerForm = document.getElementById('register-form');
+  if (registerForm) {
+      registerForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const fname = document.getElementById('reg-firstname').value.trim();
+          const lname = document.getElementById('reg-lastname').value.trim();
+          const middlename = document.getElementById('reg-middlename').value.trim();
+          const birthdate = document.getElementById('reg-birthdate').value;
+          const company = document.getElementById('reg-company').value.trim();
+          const position = document.getElementById('reg-position').value.trim();
+          const email = document.getElementById('reg-email').value.trim();
+          const regPhone = document.getElementById('reg-phone');
+          const phone = regPhone.value.trim();
+          const pass = document.getElementById('reg-password').value;
+          const pass2 = document.getElementById('reg-password-confirm').value;
+          const errorDiv = document.getElementById('register-error');
+
+          if (!fname || !lname || !company || !position || !email || !phone || !pass || !pass2) {
+              if(errorDiv) {
+                  errorDiv.textContent = 'Пожалуйста, заполните все поля';
+                  errorDiv.style.display = 'block';
+              }
+              return;
+          }
+          if (!isEmail(email)) {
+              if(errorDiv) {
+                  errorDiv.textContent = 'Введите корректную почту';
+                  errorDiv.style.display = 'block';
+              }
+              return;
+          }
+          if (!/^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/.test(phone)) {
+              if(errorDiv) {
+                  errorDiv.textContent = 'Введите корректный номер телефона';
+                  errorDiv.style.display = 'block';
+              }
+              return;
+          }
+          if (pass !== pass2) {
+              if(errorDiv) {
+                  errorDiv.textContent = 'Пароли не совпадают';
+                  errorDiv.style.display = 'block';
+              }
+              return;
+          }
+          if(errorDiv) {
+              errorDiv.style.display = 'none';
+          }
+
+          try {
+              const response = await fetch('http://localhost:3001/api/register', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                      email: email,
+                      password: pass,
+                      firstname: fname,
+                      lastname: lname,
+                      middlename: middlename,
+                      birthdate: birthdate,
+                      company: company,
+                      position: position,
+                      phone: phone,
+                      photo: regPhotoBase64 // <-- добавлено фото
+                  })
+              });
+              const result = await response.json();
+              if (result.success) {
+                  // Показываем сообщение о необходимости подтверждения email
+                  const confirmMsgDiv = document.getElementById('email-confirm-message');
+                  if (confirmMsgDiv) {
+                    confirmMsgDiv.textContent = 'Регистрация успешна! На вашу почту отправлено письмо для подтверждения. Перейдите по ссылке из письма.';
+                    confirmMsgDiv.style.display = 'block';
+                  }
+                  // Скрываем форму регистрации
+                  document.getElementById('register-page').style.display = 'none';
+                  return;
+              } else {
+                  if (errorDiv) {
+                      errorDiv.textContent = result.error || 'Ошибка регистрации';
+                      errorDiv.style.display = 'block';
+                  }
+              }
+          } catch (err) {
+              if (errorDiv) {
+                  errorDiv.textContent = 'Ошибка соединения с сервером';
+                  errorDiv.style.display = 'block';
+              }
+          }
+      });
+  }
+
+  // --- Форматирование телефона при вводе в регистрации ---
+  const regPhoneInput = document.getElementById('reg-phone');
+  if (regPhoneInput) {
+    regPhoneInput.addEventListener('input', function(e) {
+      let val = regPhoneInput.value.replace(/\D/g, '');
+      if (val.startsWith('8')) val = '7' + val.slice(1);
+      if (!val.startsWith('7')) val = '7' + val;
+      val = val.slice(0, 11);
+      let formatted = '+7';
+      if (val.length > 1) formatted += '-' + val.slice(1, 4);
+      if (val.length > 4) formatted += '-' + val.slice(4, 7);
+      if (val.length > 7) formatted += '-' + val.slice(7, 9);
+      if (val.length > 9) formatted += '-' + val.slice(9, 11);
+      regPhoneInput.value = formatted;
+    });
+  }
+
+  const profileForm = document.getElementById('profile-form');
+  if (profileForm) {
+    profileForm.onsubmit = async function(e) {
+      e.preventDefault();
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const email = userData.email;
+      if (!email) return;
+
+      let oldProfile = {};
+      try {
+        const res = await fetch('http://localhost:3001/api/profile?email=' + encodeURIComponent(email));
+        const data = await res.json();
+        oldProfile = data.profile || {};
+      } catch {}
+
+      const changedProfile = {};
+      Object.keys(oldProfile).forEach(key => {
+        if (key === 'photo') return;
+        const input = document.getElementById('modal-' + key);
+        if (input && String(input.value) !== String(oldProfile[key] || '')) {
+          changedProfile[key] = input.value;
+        }
+      });
+
+      const emailInput = document.getElementById('modal-email');
+      if (emailInput && String(emailInput.value) !== String(email)) {
+        changedProfile.email = emailInput.value;
+      }
+
+      if (photoChanged && newPhotoData) {
+        changedProfile.photo = newPhotoData;
+      }
+
+      const newPasswordInput = document.getElementById('modal-new-password');
+      const newPassword = newPasswordInput && newPasswordInput.value.trim();
+
+      if (Object.keys(changedProfile).length === 0 && !newPassword) {
+        alert('Нет изменений для сохранения.');
+        return;
+      }
+
+      const body = {
+        email,
+        profile: changedProfile
+      };
+      if (newPassword) {
+        body.newPassword = newPassword;
+      }
+
+      const response = await fetch('http://localhost:3001/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        const updatedUserData = { ...userData, ...changedProfile };
+        if (changedProfile.email) {
+          updatedUserData.email = changedProfile.email;
+        }
+        localStorage.setItem('userData', JSON.stringify(updatedUserData));
+        if (changedProfile.photo) {
+          localStorage.setItem('userPhoto', changedProfile.photo);
+        }
+        alert('Профиль успешно обновлён!');
+        if (result.emailChanged) {
+          alert('Email успешно изменён! Теперь вход только по новому адресу.');
+        }
+        updateProfileHeader();
+        updateNavUser();
+        closeProfileModal();
+      } else {
+        alert(result.error || 'Ошибка обновления профиля');
+      }
+      photoChanged = false;
+      newPhotoData = '';
+    };
+  }
+  
+  const modalPhotoInput = document.getElementById('modal-photo');
+  if (modalPhotoInput) {
+    modalPhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const photoData = ev.target.result;
+          const modalPhotoPreview = document.getElementById('modal-photo-preview');
+          if (modalPhotoPreview) modalPhotoPreview.src = photoData;
+          photoChanged = true;
+          newPhotoData = photoData;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  
+  // --- Инициализация ---
+  updateProfileHeader();
+  updateNavUser();
+
+  // --- Проверка подтверждения email по ссылке ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const confirmToken = urlParams.get('token');
+  if (confirmToken) {
+    fetch('http://localhost:3001/api/confirm-email?token=' + encodeURIComponent(confirmToken))
+      .then(res => res.text())
+      .then(msg => {
+        const msgDiv = document.getElementById('email-confirm-message');
+        if (msgDiv) {
+          msgDiv.textContent = msg;
+          msgDiv.style.display = 'block';
+        }
+      });
+  }
+
+  const deleteProfileBtn = document.getElementById('delete-profile-btn');
+  if (deleteProfileBtn) {
+    deleteProfileBtn.onclick = function() {
+      const deleteProfileModal = document.getElementById('delete-profile-modal');
+      if(deleteProfileModal) deleteProfileModal.style.display = 'flex';
+    };
+  }
+
+  const deleteProfileCancel = document.getElementById('delete-profile-cancel');
+  if(deleteProfileCancel) {
+    deleteProfileCancel.onclick = function() {
+      const deleteProfileModal = document.getElementById('delete-profile-modal');
+      if(deleteProfileModal) deleteProfileModal.style.display = 'none';
+    };
+  }
+
+  const deleteProfileConfirm = document.getElementById('delete-profile-confirm');
+  if(deleteProfileConfirm) {
+    deleteProfileConfirm.onclick = async function() {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const email = userData.email;
+      if (!email) return;
+
+      await fetch('http://localhost:3001/api/delete-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      localStorage.clear();
+      window.location.href = 'index.html';
+    };
+  }
+
+  // --- Показать форму регистрации по кнопке ---
+  const registerBtn = document.getElementById('register-btn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', function() {
+      document.getElementById('register-page').style.display = 'flex';
+      document.getElementById('auth-page').style.display = 'none';
+      const confirmMsgDiv = document.getElementById('email-confirm-message');
+      if (confirmMsgDiv) confirmMsgDiv.style.display = 'none';
+      const resendBtn = document.getElementById('resend-confirm-btn');
+      if (resendBtn) resendBtn.style.display = 'none';
+    });
+  }
+  // --- Кнопка отмены в форме регистрации ---
+  const registerCancel = document.getElementById('register-cancel');
+  if (registerCancel) {
+    registerCancel.addEventListener('click', function() {
+      document.getElementById('register-page').style.display = 'none';
+      document.getElementById('auth-page').style.display = 'flex';
+      const errorDiv = document.getElementById('register-error');
+      if (errorDiv) errorDiv.style.display = 'none';
+    });
+  }
+
+  // --- Вывод прогресса модулей в личном кабинете ---
+  if (document.getElementById('user-modules-progress')) {
+    let userData = {};
+    try { userData = JSON.parse(localStorage.getItem('userData') || '{}'); } catch {}
+    const email = userData.email;
+    const progressDiv = document.getElementById('user-modules-progress');
+    if (email && progressDiv) {
+      fetch('http://localhost:3001/api/module-progress?email=' + encodeURIComponent(email))
+        .then(res => res.json())
+        .then(data => {
+          const modulesProgress = data.modulesProgress || {};
+          // Список модулей (id: название)
+          const moduleNames = {
+            'planning': 'Планирование',
+            'classifier': 'Классификатор',
+            'control-tn': 'Контроль ТН',
+            'control-ips': 'Контроль ИПС',
+            'control-lab': 'Контроль ЛАБ',
+            'contractors': 'База подрядчиков',
+            'user-creation': 'Создание пользователя',
+            'planning-meeting': 'Планерка'
+          };
+          const started = Object.entries(modulesProgress).filter(([_, v]) => v > 0);
+          if (started.length === 0) {
+            progressDiv.innerHTML = '<div style="color:#888;text-align:center;">Вы ещё не начали обучение ни по одному модулю.</div>';
+          } else {
+            progressDiv.innerHTML = started.map(([id, percent]) => {
+              const name = moduleNames[id] || id;
+              const done = percent >= 100;
+              return `<div style="display:flex;align-items:center;gap:18px;margin-bottom:12px;">
+                <span style="font-size:1.13em;font-weight:600;min-width:180px;">${name}</span>
+                <div style="flex:1;height:12px;background:#eee;border-radius:6px;overflow:hidden;">
+                  <div style="width:${percent}%;height:100%;background:${done ? '#4caf50' : '#d32f2f'};transition:width 0.3s;"></div>
+                </div>
+                <span style="font-size:1.08em;font-weight:700;color:${done ? '#4caf50' : '#d32f2f'};margin-left:12px;">${percent}%${done ? ' (Завершён)' : ''}</span>
+              </div>`;
+            }).join('');
+          }
+        });
+    }
+  }
+
+  // --- Вывод дерева прогресса обучения в личном кабинете ---
+  if (document.getElementById('user-modules-progress')) {
+    let userData = {};
+    try { userData = JSON.parse(localStorage.getItem('userData') || '{}'); } catch {}
+    const email = userData.email;
+    const progressDiv = document.getElementById('user-modules-progress');
+    if (email && progressDiv) {
+      Promise.all([
+        fetch('http://localhost:3001/api/modules-structure').then(r => r.json()),
+        fetch('http://localhost:3001/api/learning-progress?email=' + encodeURIComponent(email)).then(r => r.json())
+      ]).then(([structure, progressData]) => {
+        const progress = progressData.learningProgress || {};
+        let html = '';
+        for (const [modId, modObj] of Object.entries(structure)) {
+          const modProg = progress[modId]?.progress || 0;
+          html += `<div style="margin-bottom:18px;">
+            <div style="font-size:1.18em;font-weight:700;color:#d32f2f;">${modObj.title} <span style='font-size:0.95em;font-weight:400;color:#555;'>${modProg}%</span></div>`;
+          for (const [secId, secObj] of Object.entries(modObj.sections || {})) {
+            const secProg = progress[modId]?.sections?.[secId]?.progress || 0;
+            html += `<div style="margin-left:22px;font-size:1.07em;font-weight:600;color:#b71c1c;">${secObj.title} <span style='font-size:0.93em;font-weight:400;color:#888;'>${secProg}%</span></div>`;
+            for (const [courseId, courseTitle] of Object.entries(secObj.courses || {})) {
+              const courseProg = progress[modId]?.sections?.[secId]?.courses?.[courseId] || 0;
+              html += `<div style="margin-left:44px;font-size:1em;color:#333;">${courseTitle} <span style='font-size:0.93em;font-weight:400;color:#888;'>${courseProg}%</span></div>`;
+            }
+          }
+          html += '</div>';
+        }
+        progressDiv.innerHTML = html || '<div style="color:#888;text-align:center;">Нет данных о прогрессе.</div>';
+      });
+    }
+  }
+
+  // --- Открывать форму регистрации по ?register=1 ---
+  if (window.location.pathname.endsWith('auth.html')) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('register') === '1') {
+      const regPage = document.getElementById('register-page');
+      const authPage = document.getElementById('auth-page');
+      if (regPage && authPage) {
+        regPage.style.display = 'flex';
+        authPage.style.display = 'none';
+      }
+    }
+  }
+
 });
 
-function initializeApp() {
-    console.log("Initializing app...");
-    
-    loadCourseData(); // Load data from localStorage if available
-    
-    // Initialize progress based on course data
-    learningProgress = courseData.progress;
-    currentSectionIndex = courseData.currentSection - 1; // Convert to 0-based index
-    
-    // Mark completed sections
-    courseData.sections.forEach((section, index) => {
-        if (section.status === "completed") {
-            completedSections.add(index);
-        }
+// --- DEMO BUTTON ANIMATION ---
+const demoBtn = document.getElementById('demo-btn');
+if (demoBtn) {
+  demoBtn.addEventListener('mouseenter', function() {
+    demoBtn.classList.add('glow');
+  });
+  demoBtn.addEventListener('mouseleave', function() {
+    demoBtn.classList.remove('glow');
+  });
+  demoBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: document.getElementById('hero-video-section').offsetTop,
+      behavior: 'smooth'
     });
-    
-    updateOverviewProgress();
-    renderKeyPoints();
-    
-    console.log("Initial state:", {
-        currentSectionIndex,
-        completedSections: Array.from(completedSections),
-        learningProgress
-    });
+    // Можно заменить на открытие модального окна с видео-демо
+  });
 }
 
-function attachEventListeners() {
-    console.log("Attaching event listeners...");
-    
-    // Get all elements
-    const startBtn = document.getElementById("startLearningBtn");
-    const backBtn = document.getElementById("backBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const testPrevBtn = document.getElementById("testPrevBtn");
-    const testNextBtn = document.getElementById("testNextBtn");
-    const finishTestBtn = document.getElementById("finishTestBtn");
-    const downloadCertBtn = document.getElementById("downloadCertBtn");
-    const backToModulesBtn = document.getElementById("backToModulesBtn");
-    const bookmarkBtn = document.getElementById("bookmarkBtn");
-    const shareBtn = document.getElementById("shareBtn");
-
-    // Attach start button event listener
-    if (startBtn) {
-        startBtn.addEventListener("click", function(e) {
-            console.log("Start learning button clicked");
-            e.preventDefault();
-            e.stopPropagation();
-            startLearning();
-        });
-    } else {
-        console.error("Start button not found! ID: startLearningBtn");
-    }
-
-    // Add Edit Mode button to the correct location within the learning page
-    const learningHeader = document.querySelector("#learningPage .learning-header");
-    if (learningHeader) {
-        const editModeBtn = document.createElement("button");
-        editModeBtn.id = "editModeBtn";
-        editModeBtn.textContent = "Редактировать";
-        editModeBtn.className = "btn btn--secondary btn--sm";
-        editModeBtn.style.alignSelf = "flex-start"; // Align button nicely
-        editModeBtn.addEventListener("click", toggleEditMode);
-        learningHeader.appendChild(editModeBtn);
-    } else {
-        console.error("Learning header not found, could not add Edit Mode button.");
-    }
-    
-    // Attach other event listeners
-    if (backBtn) {
-        backBtn.addEventListener("click", function(e) {
-            console.log("Back button clicked");
-            e.preventDefault();
-            handleBackNavigation();
-        });
-    }
-    
-    if (prevBtn) {
-        prevBtn.addEventListener("click", function(e) {
-            console.log("Previous button clicked");
-            e.preventDefault();
-            navigateSection(-1);
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener("click", function(e) {
-            console.log("Next button clicked");
-            e.preventDefault();
-            navigateSection(1);
-        });
-    }
-    
-    if (testPrevBtn) {
-        testPrevBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            navigateTestQuestion(-1);
-        });
-    }
-    
-    if (testNextBtn) {
-        testNextBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            navigateTestQuestion(1);
-        });
-    }
-    
-    if (finishTestBtn) {
-        finishTestBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            finishTest();
-        });
-    }
-    
-    if (downloadCertBtn) {
-        downloadCertBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            downloadCertificate();
-        });
-    }
-    
-    if (backToModulesBtn) {
-        backToModulesBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            showPage("overview");
-        });
-    }
-    
-    if (bookmarkBtn) {
-        bookmarkBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            handleBookmark();
-        });
-    }
-    
-    if (shareBtn) {
-        shareBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            handleShare();
-        });
-    }
-    
-    console.log("All event listeners attached successfully");
+// --- Анимация облёта кнопки "Смотреть демо" ---
+if (demoBtn) {
+  let animating = false;
+  demoBtn.addEventListener('mouseenter', function() {
+    if (animating) return;
+    animating = true;
+    demoBtn.classList.add('animating');
+  });
+  demoBtn.addEventListener('animationend', function() {
+    demoBtn.classList.remove('animating');
+    animating = false;
+  });
 }
-
-// Page navigation
-function showPage(pageName) {
-    console.log("Showing page:", pageName);
-    
-    try {
-        // Hide all pages
-        Object.values(pages).forEach(page => {
-            if (page) {
-                page.classList.add("hidden");
-            }
-        });
-        
-        // Show selected page
-        if (pages[pageName]) {
-            pages[pageName].classList.remove("hidden");
-            console.log("Page switched to:", pageName);
-        } else {
-            console.error("Page not found:", pageName);
-            return false;
-        }
-        
-        // Update back button visibility
-        const backBtn = document.getElementById("backBtn");
-        if (backBtn) {
-            backBtn.classList.toggle("hidden", pageName === "overview");
-        }
-        
-        return true;
-    } catch (error) {
-        console.error("Error switching pages:", error);
-        return false;
-    }
-}
-
-function handleBackNavigation() {
-    const currentPage = getCurrentPage();
-    console.log("Handling back navigation from:", currentPage);
-    
-    if (currentPage === "learning") {
-        showPage("overview");
-    } else if (currentPage === "test") {
-        showPage("learning");
-    } else if (currentPage === "certificate") {
-        showPage("overview");
-    }
-}
-
-function getCurrentPage() {
-    return Object.entries(pages).find(([key, page]) => 
-        page && !page.classList.contains("hidden")
-    )?.[0] || "overview";
-}
-
-// Learning functionality
-function startLearning() {
-    console.log("=== Starting learning session ===");
-    
-    try {
-        // Set start time
-        startTime = Date.now();
-        
-        // Show learning page
-        const success = showPage("learning");
-        if (!success) {
-            throw new Error("Failed to show learning page");
-        }
-        
-        // Initialize learning content
-        renderCurrentSection();
-        renderSidebarNavigation();
-        updateAllProgress();
-        startTimeTracking();
-        
-        console.log("Learning session started successfully");
-        
-    } catch (error) {
-        console.error("Error starting learning:", error);
-        alert("Произошла ошибка при запуске обучения. Попробуйте перезагрузить страницу.");
-    }
-}
-
-function navigateSection(direction) {
-    console.log("Navigating section:", direction);
-    
-    const newIndex = currentSectionIndex + direction;
-    
-    // Check bounds
-    if (newIndex < 0 || newIndex >= courseData.sections.length) {
-        console.log("Navigation out of bounds");
-        return;
-    }
-    
-    // Mark current section as completed when moving forward
-    if (direction > 0) {
-        completedSections.add(currentSectionIndex);
-        updateLearningProgress();
-    }
-    
-    // Check if trying to access locked section
-    if (newIndex > currentSectionIndex && !completedSections.has(currentSectionIndex)) {
-        alert("Пожалуйста, завершите текущий раздел перед переходом к следующему");
-        return;
-    }
-    
-    currentSectionIndex = newIndex;
-    renderCurrentSection();
-    renderSidebarNavigation();
-    updateAllProgress();
-    
-    console.log("Section navigation completed:", currentSectionIndex);
-}
-
-function renderCurrentSection() {
-    const section = courseData.sections[currentSectionIndex];
-    console.log("Rendering section:", section.title);
-    
-    const sectionTitle = document.getElementById("sectionTitle");
-    const sectionDescription = document.getElementById("sectionDescription");
-    const learningBody = document.getElementById("learningBody");
-    
-    if (sectionTitle) {
-        sectionTitle.textContent = `Раздел ${section.id}: ${section.title}`;
-        sectionTitle.contentEditable = isEditMode;
-    }
-    
-    if (sectionDescription) {
-        sectionDescription.textContent = section.description;
-        sectionDescription.contentEditable = isEditMode;
-    }
-    
-    if (learningBody) {
-        learningBody.innerHTML = section.content;
-        learningBody.contentEditable = isEditMode;
-    }
-    
-    updateNavigationButtons();
-}
-
-function renderSidebarNavigation() {
-    const container = document.getElementById("sidebarNavItems");
-    if (!container) return;
-    
-    container.innerHTML = courseData.sections.map((section, index) => {
-        let statusClass = "";
-        if (index === currentSectionIndex) {
-            statusClass = "active";
-        } else if (completedSections.has(index)) {
-            statusClass = "completed";
-        } else if (index > currentSectionIndex) {
-            statusClass = "locked";
-        }
-        
-        return `
-            <div class="sidebar-nav-item ${statusClass}" data-section="${index}">
-                <span class="sidebar-nav-icon">${section.icon}</span>
-                <div>
-                    <div class="sidebar-nav-title" contenteditable="${isEditMode}">${section.title}</div>
-                    <small>${section.duration}</small>
-                </div>
-            </div>
-        `;
-    }).join("");
-    
-    // Add click handlers
-    container.querySelectorAll(".sidebar-nav-item").forEach(item => {
-        item.addEventListener("click", function(e) {
-            const sectionIndex = parseInt(this.dataset.section);
-            console.log("Sidebar item clicked:", sectionIndex);
-            
-            if (isEditMode) return; // Disable navigation in edit mode
-            
-            if (sectionIndex <= currentSectionIndex || completedSections.has(sectionIndex - 1)) {
-                currentSectionIndex = sectionIndex;
-                renderCurrentSection();
-                renderSidebarNavigation();
-                updateAllProgress();
-            } else {
-                alert("Завершите предыдущие разделы для доступа к этому разделу");
-            }
-        });
-    });
-}
-
-function renderKeyPoints() {
-    const keyPointsList = document.getElementById("keyPointsList");
-    if (!keyPointsList) return;
-    
-    keyPointsList.innerHTML = courseData.keyPoints.map(point => 
-        `<li>${point}</li>`
-    ).join("");
-}
-
-function updateNavigationButtons() {
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    
-    if (prevBtn) {
-        prevBtn.style.visibility = currentSectionIndex === 0 ? "hidden" : "visible";
-    }
-    
-    if (nextBtn) {
-        const isLastSection = currentSectionIndex === courseData.sections.length - 1;
-        nextBtn.textContent = isLastSection ? "К финальному тесту →" : "Следующий раздел →";
-    }
-}
-
-function updateAllProgress() {
-    updateOverviewProgress();
-    updateLearningProgress();
-    updateCircularProgress();
-}
-
-function updateOverviewProgress() {
-    const progressPercent = document.getElementById("progressPercent");
-    const progressFill = document.getElementById("progressFill");
-    
-    if (progressPercent) {
-        progressPercent.textContent = `${learningProgress}%`;
-    }
-    if (progressFill) {
-        progressFill.style.width = `${learningProgress}%`;
-    }
-}
-
-function updateLearningProgress() {
-    const completed = completedSections.size;
-    const total = courseData.sections.length;
-    learningProgress = Math.round((completed / total) * 100);
-    
-    // Update header progress
-    const headerProgressFill = document.getElementById("headerProgressFill");
-    const headerProgressText = document.getElementById("headerProgressText");
-    
-    if (headerProgressFill) {
-        headerProgressFill.style.width = `${learningProgress}%`;
-    }
-    if (headerProgressText) {
-        headerProgressText.textContent = `${learningProgress}% завершено`;
-    }
-}
-
-function updateCircularProgress() {
-    const circularProgress = document.getElementById("circularProgress");
-    const circularProgressValue = document.getElementById("circularProgressValue");
-    
-    if (circularProgress && circularProgressValue) {
-        const angle = (learningProgress / 100) * 360;
-        circularProgress.style.background = `conic-gradient(#dc3545 ${angle}deg, var(--color-secondary) ${angle}deg)`;
-        circularProgressValue.textContent = `${learningProgress}%`;
-    }
-}
-
-function startTimeTracking() {
-    setInterval(() => {
-        if (startTime) {
-            timeSpentMinutes = Math.floor((Date.now() - startTime) / 60000);
-            const timeSpentText = document.getElementById("timeSpentText");
-            if (timeSpentText) {
-                timeSpentText.textContent = `${timeSpentMinutes} минут`;
-            }
-        }
-    }, 60000); // Update every minute
-}
-
-function handleVideoUpload(event) {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('video/')) {
-        const videoPlayer = document.getElementById('videoPlayer');
-        const videoPlaceholder = document.getElementById('videoPlaceholder');
-        
-        if (videoPlayer && videoPlaceholder) {
-            const videoUrl = URL.createObjectURL(file);
-            videoPlayer.src = videoUrl;
-            videoPlayer.style.display = 'block';
-            videoPlaceholder.style.display = 'none';
-            videoPlayer.play();
-            
-            videoPlayer.onended = () => {
-                URL.revokeObjectURL(videoUrl);
-            };
-        }
-    } else if (file) {
-        alert('Пожалуйста, выберите видеофайл.');
-}
-}
-
-// Interactive functions
-function launchInteractiveDemo() {
-    alert("Запущена интерактивная демонстрация! В полной версии здесь будет интерактивный конструктор документов.");
-}
-
-function showDocumentExample(type) {
-    const examples = {
-        drawings: "Просмотр примера рабочих чертежей",
-        estimates: "Просмотр примера сметной документации",
-        specs: "Просмотр примера технических условий"
-    };
-    alert(examples[type] || "Просмотр примера документации");
-}
-
-function completeExercise(exerciseNumber) {
-    alert(`Задание ${exerciseNumber} выполнено успешно! Ваш ответ засчитан.`);
-}
-
-function startSectionTest() {
-    alert("Переход к тесту по текущему разделу! В полной версии здесь будет специализированный тест.");
-}
-
-function startFinalTest() {
-    startTest();
-}
-
-function handleBookmark() {
-    alert("Раздел добавлен в закладки! В полной версии закладки будут сохраняться в профиле пользователя.");
-}
-
-function handleShare() {
-    alert("Ссылка на раздел скопирована в буфер обмена! В полной версии будет полная функциональность шаринга.");
-}
-
-// Test functionality
-function startTest() {
-    console.log("Starting test");
-    completedSections.add(currentSectionIndex);
-    updateAllProgress();
-    
-    showPage("test");
-    testState.current = 0;
-    testState.answers.fill(null);
-    testState.timeLeft = 600;
-    
-    renderTestQuestion();
-    updateTestProgress();
-    startTestTimer();
-}
-
-function renderTestQuestion() {
-    const question = testQuestions[testState.current];
-    const testContent = document.getElementById("testContent");
-    
-    if (!testContent) return;
-    
-    const options = question.options.map((option, index) => {
-        const isSelected = testState.answers[testState.current] === index;
-        return `
-            <label class="test-answer ${isSelected ? 'selected' : ''}">
-                <input type="radio" name="testAnswer" value="${index}" ${isSelected ? 'checked' : ''}>
-                <span class="test-answer-text">${option}</span>
-            </label>
-        `;
-    }).join("");
-    
-    testContent.innerHTML = `
-        <div class="test-question">
-            <h3>Вопрос ${testState.current + 1}</h3>
-            <p>${question.question}</p>
-            <div class="test-answers">${options}</div>
-        </div>
-    `;
-    
-    // Add event listeners
-    testContent.querySelectorAll('input[name="testAnswer"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            testState.answers[testState.current] = parseInt(e.target.value);
-            renderTestQuestion(); // Re-render to show selection
-        });
-    });
-    
-    updateTestNavigation();
-}
-
-function updateTestNavigation() {
-    const testPrevBtn = document.getElementById("testPrevBtn");
-    const testNextBtn = document.getElementById("testNextBtn");
-    const finishTestBtn = document.getElementById("finishTestBtn");
-    
-    if (testPrevBtn) {
-        testPrevBtn.style.visibility = testState.current === 0 ? "hidden" : "visible";
-    }
-    
-    const isLastQuestion = testState.current === testQuestions.length - 1;
-    
-    if (testNextBtn) {
-        testNextBtn.classList.toggle("hidden", isLastQuestion);
-    }
-    if (finishTestBtn) {
-        finishTestBtn.classList.toggle("hidden", !isLastQuestion);
-    }
-}
-
-function navigateTestQuestion(direction) {
-    const newIndex = testState.current + direction;
-    if (newIndex >= 0 && newIndex < testQuestions.length) {
-        testState.current = newIndex;
-        renderTestQuestion();
-        updateTestProgress();
-    }
-}
-
-function updateTestProgress() {
-    const progress = Math.round(((testState.current + 1) / testQuestions.length) * 100);
-    const testProgressFill = document.getElementById("testProgressFill");
-    const testProgressText = document.getElementById("testProgressText");
-    
-    if (testProgressFill) {
-        testProgressFill.style.width = `${progress}%`;
-    }
-    if (testProgressText) {
-        testProgressText.textContent = `Вопрос ${testState.current + 1} из ${testQuestions.length}`;
-    }
-}
-
-function startTestTimer() {
-    updateTestTimer();
-    testState.timer = setInterval(() => {
-        testState.timeLeft--;
-        updateTestTimer();
-        
-        if (testState.timeLeft <= 0) {
-            clearInterval(testState.timer);
-            finishTest();
-        }
-    }, 1000);
-}
-
-function updateTestTimer() {
-    const minutes = Math.floor(testState.timeLeft / 60);
-    const seconds = testState.timeLeft % 60;
-    const testTimer = document.getElementById("testTimer");
-    
-    if (testTimer) {
-        testTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }
-}
-
-function finishTest() {
-    console.log("Finishing test");
-    clearInterval(testState.timer);
-    
-    const correctAnswers = testState.answers.reduce((count, answer, index) => {
-        return answer === testQuestions[index].correct ? count + 1 : count;
-    }, 0);
-    
-    const score = Math.round((correctAnswers / testQuestions.length) * 100);
-    
-    if (score >= 80) {
-        learningProgress = 100;
-        updateAllProgress();
-        showCertificate(score);
-    } else {
-        alert(`Ваш результат: ${score}%. Необходимо набрать минимум 80%. Попробуйте еще раз!`);
-        // Reset test
-        testState.current = 0;
-        testState.answers.fill(null);
-        testState.timeLeft = 600;
-        renderTestQuestion();
-        updateTestProgress();
-        startTestTimer();
-    }
-}
-
-// Certificate functionality
-function showCertificate(score) {
-    console.log("Showing certificate");
-    const certificateDate = document.getElementById("certificateDate");
-    const certificateScore = document.getElementById("certificateScore");
-    
-    if (certificateDate) {
-        certificateDate.textContent = new Date().toLocaleDateString("ru-RU");
-    }
-    if (certificateScore) {
-        certificateScore.textContent = `${score}%`;
-    }
-    
-    showPage("certificate");
-}
-
-function downloadCertificate() {
-    const certificateText = `
-СЕРТИФИКАТ ICONA 2.0
-Система онлайн-обучения
-
-Подтверждает, что специалист успешно завершил обучение по программе
-"Инженер по строительству"
-
-Дата выдачи: ${new Date().toLocaleDateString("ru-RU")}
-Результат: ${document.getElementById("certificateScore").textContent}
-
-Сертификат подтверждает освоение ключевых компетенций:
-- Планирование строительных работ
-- Контроль качества и безопасности
-- Работа с проектной документацией
-- Технический надзор
-    `;
-    
-    const blob = new Blob([certificateText], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "certificate_icona_construction_engineer.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-    
-    alert("Сертификат успешно загружен!");
-}
-
-// --- New functions for Edit Mode and Data Persistence ---
-
-function toggleEditMode() {
-    isEditMode = !isEditMode;
-    const editBtn = document.getElementById('editModeBtn');
-
-    if (!isEditMode) { // Exiting edit mode
-        console.log("Saving changes...");
-
-        // 1. Save sidebar titles
-        const sidebarTitles = document.querySelectorAll('.sidebar-nav-title');
-        sidebarTitles.forEach((titleEl, index) => {
-            if (courseData.sections[index]) {
-                courseData.sections[index].title = titleEl.textContent.trim();
-            }
-        });
-
-        // 2. Save currently open section's main content
-        const currentSection = courseData.sections[currentSectionIndex];
-        const sectionTitleEl = document.getElementById("sectionTitle");
-        const sectionDescriptionEl = document.getElementById("sectionDescription");
-        const learningBodyEl = document.getElementById("learningBody");
-
-        if (sectionTitleEl) {
-            // Title is in format "Раздел X: Title". We only want "Title".
-            const titleText = sectionTitleEl.textContent.trim();
-            currentSection.title = titleText.substring(titleText.indexOf(':') + 1).trim();
-        }
-        if (sectionDescriptionEl) {
-            currentSection.description = sectionDescriptionEl.textContent.trim();
-        }
-        if (learningBodyEl) {
-            currentSection.content = learningBodyEl.innerHTML;
-        }
-
-        saveCourseData();
-        if (editBtn) {
-            editBtn.textContent = 'Редактировать';
-            editBtn.classList.remove('btn--danger');
-        }
-        document.body.classList.remove('edit-mode-active');
-        alert('Изменения сохранены в локальном хранилище браузера!');
-
-    } else { // Entering edit mode
-        if (editBtn) {
-            editBtn.textContent = 'Сохранить и выйти';
-            editBtn.classList.add('btn--danger');
-        }
-        document.body.classList.add('edit-mode-active');
-        alert('Режим редактирования включен. Вы можете изменять текст прямо на странице.');
-    }
-
-    // Re-render views to apply/remove contentEditable attributes
-    renderCurrentSection();
-    renderSidebarNavigation();
-}
-
-function saveCourseData() {
-    try {
-        const dataToSave = JSON.stringify(courseData);
-        localStorage.setItem('iconaCourseData', dataToSave);
-        console.log("Course data saved to localStorage.");
-    } catch (error) {
-        console.error("Failed to save course data to localStorage:", error);
-    }
-}
-
-function loadCourseData() {
-    try {
-        const savedData = localStorage.getItem('iconaCourseData');
-        if (savedData) {
-            courseData = JSON.parse(savedData);
-            // After loading, ensure test questions content is dynamic
-            const testSection = courseData.sections.find(s => s.type === 'test');
-            if (testSection) {
-                 testSection.content = testSection.content.replace(/\d+ вопроса/, `${testQuestions.length} вопроса`);
-            }
-            console.log("Course data loaded from localStorage.");
-        } else {
-            console.log("No saved data found, using default data.");
-        }
-    } catch (error) {
-        console.error("Failed to load course data from localStorage:", error);
-    }
-}
-
-function addEditModeStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .edit-mode-active [contenteditable="true"] {
-            outline: 2px dashed #dc3545;
-            background-color: #fff9f9;
-            padding: 2px;
-            cursor: text;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Global fallback function for debugging
-window.testStartLearning = function() {
-    console.log("Manual test function called");
-    startLearning();
-};
-
-console.log("JavaScript loaded successfully");

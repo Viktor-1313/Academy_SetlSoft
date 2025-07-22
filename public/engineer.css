@@ -840,4 +840,79 @@ details > div {
 .test-info li {
     margin: 8px 0;
     color: var(--text-secondary);
+}
+
+/* Collapsible Section Styles */
+.collapsible-section {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: 2px solid var(--primary-color);
+}
+
+.collapsible-header {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    padding: 30px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.collapsible-header:hover {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+}
+
+.collapsible-header h1 {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+}
+
+.collapsible-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+    max-width: 600px;
+}
+
+.collapsible-icon {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    transition: transform 0.3s ease;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
+.collapsible-section.active .collapsible-icon {
+    transform: rotate(180deg);
+}
+
+.collapsible-content {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.collapsible-section.active .collapsible-content {
+    padding: 30px;
+    max-height: 2000px; /* Adjust this value based on your content */
+}
+
+@media (max-width: 768px) {
+    .collapsible-header {
+        padding: 20px;
+    }
+    
+    .collapsible-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .collapsible-section.active .collapsible-content {
+        padding: 20px;
+    }
 } 

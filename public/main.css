@@ -1711,6 +1711,83 @@ body {
   transform: scale(0.98);
 }
 
+#demo-btn {
+  position: relative;
+  z-index: 2;
+  transition: box-shadow .25s, transform .25s;
+}
+#demo-btn.animating {
+  animation: demoBtnFly 1.5s ease-in-out forwards;
+}
+@keyframes demoBtnFly {
+  0% { transform: translateX(0) scale(1) rotate(0deg); opacity: 1; }
+  1% { transform: translateX(6px) scale(1.008) rotate(1deg); opacity: 1; }
+  2% { transform: translateX(12px) scale(1.016) rotate(2deg); opacity: 1; }
+  3% { transform: translateX(18px) scale(1.024) rotate(3deg); opacity: 1; }
+  4% { transform: translateX(24px) scale(1.032) rotate(4deg); opacity: 1; }
+  5% { transform: translateX(30px) scale(1.04) rotate(5deg); opacity: 1; }
+  6% { transform: translateX(36px) scale(1.048) rotate(6deg); opacity: 1; }
+  7% { transform: translateX(42px) scale(1.056) rotate(7deg); opacity: 1; }
+  8% { transform: translateX(48px) scale(1.064) rotate(8deg); opacity: 1; }
+  9% { transform: translateX(54px) scale(1.072) rotate(9deg); opacity: 1; }
+  10% { transform: translateX(60px) scale(1.08) rotate(10deg); opacity: 1; }
+  12% { transform: translateX(72px) scale(1.085) rotate(12deg); opacity: 0.995; }
+  14% { transform: translateX(84px) scale(1.09) rotate(14deg); opacity: 0.99; }
+  16% { transform: translateX(96px) scale(1.095) rotate(16deg); opacity: 0.985; }
+  18% { transform: translateX(108px) scale(1.10) rotate(18deg); opacity: 0.98; }
+  20% { transform: translateX(120px) scale(1.105) rotate(20deg); opacity: 0.975; }
+  22% { transform: translateX(132px) scale(1.11) rotate(22deg); opacity: 0.97; }
+  24% { transform: translateX(144px) scale(1.115) rotate(24deg); opacity: 0.965; }
+  26% { transform: translateX(156px) scale(1.12) rotate(26deg); opacity: 0.96; }
+  28% { transform: translateX(168px) scale(1.115) rotate(29deg); opacity: 0.94; }
+  30% { transform: translateX(180px) scale(1.11) rotate(32deg); opacity: 0.92; }
+  32% { transform: translateX(192px) scale(1.09) rotate(36deg); opacity: 0.88; }
+  34% { transform: translateX(204px) scale(1.08) rotate(40deg); opacity: 0.82; }
+  36% { transform: translateX(216px) scale(1.07) rotate(45deg); opacity: 0.75; }
+  38% { transform: translateX(228px) scale(1.06) rotate(50deg); opacity: 0.68; }
+  40% { transform: translateX(240px) scale(1.05) rotate(55deg); opacity: 0.62; }
+  42% { transform: translateX(252px) scale(1.03) rotate(60deg); opacity: 0.55; }
+  44% { transform: translateX(264px) scale(1.01) rotate(65deg); opacity: 0.48; }
+  46% { transform: translateX(276px) scale(0.98) rotate(70deg); opacity: 0.4; }
+  48% { transform: translateX(288px) scale(0.95) rotate(80deg); opacity: 0.3; }
+  49% { transform: translateX(300px) scale(0.92) rotate(90deg); opacity: 0.2; }
+  49.5% { transform: translateX(310px) scale(0.91) rotate(100deg); opacity: 0.1; }
+  50% { transform: translateX(320px) scale(0.9) rotate(110deg); opacity: 0; }
+  50.5% { transform: translateX(-320px) scale(0.9) rotate(250deg); opacity: 0; }
+  51% { transform: translateX(-310px) scale(0.91) rotate(260deg); opacity: 0.05; }
+  51.5% { transform: translateX(-300px) scale(0.92) rotate(270deg); opacity: 0.2; }
+  52% { transform: translateX(-288px) scale(0.95) rotate(280deg); opacity: 0.3; }
+  54% { transform: translateX(-276px) scale(0.98) rotate(290deg); opacity: 0.4; }
+  56% { transform: translateX(-264px) scale(1.01) rotate(295deg); opacity: 0.48; }
+  58% { transform: translateX(-252px) scale(1.03) rotate(300deg); opacity: 0.55; }
+  60% { transform: translateX(-240px) scale(1.05) rotate(305deg); opacity: 0.62; }
+  62% { transform: translateX(-228px) scale(1.06) rotate(310deg); opacity: 0.68; }
+  64% { transform: translateX(-216px) scale(1.07) rotate(315deg); opacity: 0.75; }
+  66% { transform: translateX(-204px) scale(1.08) rotate(320deg); opacity: 0.82; }
+  68% { transform: translateX(-192px) scale(1.09) rotate(325deg); opacity: 0.88; }
+  70% { transform: translateX(-180px) scale(1.11) rotate(330deg); opacity: 0.92; }
+  72% { transform: translateX(-168px) scale(1.115) rotate(335deg); opacity: 0.94; }
+  74% { transform: translateX(-156px) scale(1.12) rotate(340deg); opacity: 0.96; }
+  76% { transform: translateX(-144px) scale(1.115) rotate(343deg); opacity: 0.965; }
+  78% { transform: translateX(-132px) scale(1.11) rotate(346deg); opacity: 0.97; }
+  80% { transform: translateX(-120px) scale(1.105) rotate(348deg); opacity: 0.975; }
+  82% { transform: translateX(-108px) scale(1.10) rotate(349deg); opacity: 0.98; }
+  84% { transform: translateX(-96px) scale(1.095) rotate(350deg); opacity: 0.985; }
+  86% { transform: translateX(-84px) scale(1.09) rotate(352deg); opacity: 0.99; }
+  88% { transform: translateX(-72px) scale(1.085) rotate(354deg); opacity: 0.995; }
+  90% { transform: translateX(-60px) scale(1.08) rotate(355deg); opacity: 1; }
+  91% { transform: translateX(-54px) scale(1.072) rotate(356deg); opacity: 1; }
+  92% { transform: translateX(-48px) scale(1.064) rotate(357deg); opacity: 1; }
+  93% { transform: translateX(-42px) scale(1.056) rotate(358deg); opacity: 1; }
+  94% { transform: translateX(-36px) scale(1.048) rotate(359deg); opacity: 1; }
+  95% { transform: translateX(-30px) scale(1.04) rotate(359.5deg); opacity: 1; }
+  96% { transform: translateX(-24px) scale(1.032) rotate(359.7deg); opacity: 1; }
+  97% { transform: translateX(-18px) scale(1.024) rotate(359.85deg); opacity: 1; }
+  98% { transform: translateX(-12px) scale(1.016) rotate(359.93deg); opacity: 1; }
+  99% { transform: translateX(-6px) scale(1.008) rotate(359.97deg); opacity: 1; }
+  100% { transform: translateX(0) scale(1) rotate(360deg); opacity: 1; }
+}
+
 /* --- Современные плитки hero --- */
 .hero-tiles-row {
   display: flex;

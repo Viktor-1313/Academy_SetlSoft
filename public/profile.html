@@ -29,8 +29,8 @@
                 <div class="nav-menu" style="display:flex;align-items:center;gap:1.2em;">
                     <a class="nav-item" href="index.html">Главная</a>
                     <a class="nav-item" href="roles.html">Роли</a>
-                    <a class="nav-item" href="engineer.html">Модули</a>
-                    <a class="nav-item" href="application1.html">Приложения</a>
+                    <a class="nav-item" href="modules.html">Модули</a>
+                    <a class="nav-item" href="applications.html">Приложения</a>
                     <div id="nav-user" style="display:none;align-items:center;gap:0.7em;cursor:pointer;margin-left:1.5em;">
                         <img id="nav-user-photo" src="https://avatars.dicebear.com/api/personas/username.svg" alt="Аватар" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;box-shadow:0 2px 8px rgba(211,47,47,.10);border:2px solid #d32f2f;">
                         <span id="nav-user-name" style="color:#d32f2f;font-weight:600;font-size:1.08em;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Пользователь</span>
@@ -38,52 +38,19 @@
                 </div>
             </div>
         </nav>
-
+       <div style="width:100%;height:4px;background:#d32f2f;"></div>
 
 <!-- Личный кабинет -->
 <section id="profile-section" class="section active" style="min-height:100vh; background:#f5f5f5; flex-direction:row; justify-content:center; align-items:flex-start; gap:150px; padding-top:150px;">
   <div style="display:flex; flex-direction:column; align-items:center; gap:48px;">
   <div class="dashboard-tiles-container" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:900px; width:100%; margin-bottom:0;">
     <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Обучение</h2>
-    <div class="dashboard-tiles-grid" style="display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr); gap:32px 32px;">
-      <div class="dashboard-tile" onclick="openTileModal('tile1')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:250px; min-height:220px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:900; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">5</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="8" y="12" width="32" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 20h16M16 28h10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Отчётность</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 обработка<br>+3 принято</div>
-      </div>
-      <div class="dashboard-tile" onclick="openTileModal('tile2')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Предписания</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 новое<br>22.12.16</div>
-      </div>
-      <div class="dashboard-tile" onclick="openTileModal('tile3')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">1</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M16 24l6 6 10-10" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Уведомления</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">+1 новое<br>22.12.16</div>
-      </div>
-      <div class="dashboard-tile" onclick="openTileModal('tile4')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">6</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Сообщения</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">1 непрочитано<br>+4 всего</div>
-      </div>
-      <div class="dashboard-tile" onclick="openTileModal('tile5')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">2</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="10" y="14" width="28" height="20" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M18 24h12M18 28h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Документы</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">+2 новых<br>22.12.16</div>
-      </div>
-      <div class="dashboard-tile" onclick="openTileModal('tile6')" style="background:linear-gradient(120deg,#e53935 80%,#fff0 100%); border-radius:16px; box-shadow:0 2px 12px #d32f2f22; padding:2.1em 2em 1.5em 2em; min-width:180px; min-height:120px; display:flex; flex-direction:column; align-items:flex-start; position:relative; cursor:pointer;">
-        <span class="tile-badge" style="background:#2196f3; position:absolute; top:18px; right:22px; color:#fff; font-weight:700; border-radius:50%; padding:0.3em 0.9em; font-size:1.1em;">3</span>
-        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="margin-bottom:1.1em;"><rect x="12" y="12" width="24" height="24" rx="3" stroke="#fff" stroke-width="2.5"/><path d="M24 18v12M18 24h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <div style="color:#fff; font-size:1.13em; font-weight:700; margin-bottom:0.3em;">Разъяснения</div>
-        <div style="color:#fff; font-size:0.99em; opacity:0.95;">2 периода<br>+3 новых</div>
-      </div>
-    </div>
+    <div id="user-modules-progress" style="width:100%;margin-bottom:2.2rem;"></div>
+    
+
   </div>
+<section>
+
   <!-- Блок 'Ваши достижения' -->
   <div class="achievements-list" style="background:#fff; border-radius:22px; box-shadow:0 2px 16px #d32f2f11; border:2px solid #d32f2f; padding:48px 56px 38px 56px; display:flex; flex-direction:column; align-items:center; min-width:400px; max-width:540px; width:100%; margin-top:40px;">
     <h2 style="font-family:'FKGroteskNeue',Inter,sans-serif;font-size:2.1rem;color:#d32f2f;font-weight:700;margin-bottom:2.2rem; text-align: center;">Ваши достижения</h2>
@@ -267,8 +234,7 @@
 
 
 
-  <script src="profile.js"></script>
-  <script src="main.js"></script>
+  <script src="app.js"></script>
   <script>
     function logout() {
       localStorage.clear();
