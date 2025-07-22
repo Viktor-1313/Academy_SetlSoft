@@ -2,11 +2,12 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const Busboy = require('busboy');
+const { sendConfirmationMail } = require('./mailer');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = 3001;
 const USERS_FILE = path.join(__dirname, 'users.json');
-const MODULES_STRUCTURE_FILE = path.join(__dirname, 'modules_structure.json');
 
 // --- middlewares ---
 app.use(express.json({ limit: '10mb' })); // для JSON-тел
@@ -35,15 +36,18 @@ function writeUsers(users) {
 // --- API endpoints ---
 
 // Регистрация пользователя
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
   const data = req.body;
   let users = readUsers();
   if (users.find(u => u.email === data.email)) {
     return res.status(400).json({ error: 'Пользователь уже существует' });
   }
+  const confirmToken = uuidv4();
   users.push({
     email: data.email,
     password: data.password,
+    confirmed: false,
+    confirmToken,
     profile: {
       firstname: data.firstname,
       lastname: data.lastname,
@@ -56,11 +60,16 @@ app.post('/api/register', (req, res) => {
     }
   });
   writeUsers(users);
+  try {
+    await sendConfirmationMail(data.email, confirmToken);
+  } catch (e) {
+    return res.status(500).json({ error: 'Ошибка отправки письма' });
+  }
   res.json({ success: true });
 });
 
 // Обновление профиля пользователя
-app.post('/api/profile', (req, res) => {
+app.post('/api/profile', async (req, res) => {
   const data = req.body;
   let users = readUsers();
   const idx = users.findIndex(u => u.email === data.email);
@@ -75,8 +84,17 @@ app.post('/api/profile', (req, res) => {
     if (users.some(u => u.email === data.profile.email)) {
       return res.status(400).json({ error: 'Этот email уже используется' });
     }
-    users[idx].email = data.profile.email;
+    // Сохраняем новый email, но подтверждаем только после клика по ссылке
+    const confirmToken = uuidv4();
+    users[idx].pendingEmail = data.profile.email;
+    users[idx].confirmToken = confirmToken;
+    users[idx].confirmed = false;
     emailChanged = true;
+    try {
+      await sendConfirmationMail(data.profile.email, confirmToken);
+    } catch (e) {
+      return res.status(500).json({ error: 'Ошибка отправки письма' });
+    }
   }
 
   // Обновляем пароль, если он был передан
@@ -86,7 +104,6 @@ app.post('/api/profile', (req, res) => {
 
   // Обновляем остальные данные профиля
   users[idx].profile = { ...users[idx].profile, ...data.profile };
-  
   writeUsers(users);
   res.json({ success: true, emailChanged });
 });
@@ -106,6 +123,9 @@ app.post('/api/login', (req, res) => {
   const users = readUsers();
   const user = users.find(u => u.email === email && u.password === password);
   if (user) {
+    if (!user.confirmed) {
+      return res.status(403).json({ error: 'Email не подтвержден' });
+    }
     res.json({ success: true, user: { email: user.email, profile: user.profile } });
   } else {
     res.status(401).json({ error: 'Неверные учетные данные' });
@@ -155,47 +175,44 @@ app.post('/api/delete-profile', (req, res) => {
     res.json({ success: true });
 });
 
-// --- API: структура модулей ---
-app.get('/api/modules-structure', (req, res) => {
-  if (!fs.existsSync(MODULES_STRUCTURE_FILE)) return res.status(404).json({ error: 'Нет структуры модулей' });
-  const structure = JSON.parse(fs.readFileSync(MODULES_STRUCTURE_FILE, 'utf8'));
-  res.json(structure);
+// Подтверждение email по токену
+app.get('/api/confirm-email', (req, res) => {
+  const { token } = req.query;
+  let users = readUsers();
+  const idx = users.findIndex(u => u.confirmToken === token);
+  if (idx === -1) {
+    return res.status(400).send('Некорректный или устаревший токен');
+  }
+  // Если есть pendingEmail — это смена email
+  if (users[idx].pendingEmail) {
+    users[idx].email = users[idx].pendingEmail;
+    delete users[idx].pendingEmail;
+  }
+  users[idx].confirmed = true;
+  users[idx].confirmToken = null;
+  writeUsers(users);
+  res.send('Email подтвержден!');
 });
 
-// --- API: прогресс обучения пользователя ---
-// Получить прогресс
-app.get('/api/learning-progress', (req, res) => {
-  const { email } = req.query;
+// Повторная отправка письма (разрешить только 1 раз)
+app.post('/api/resend-confirmation', async (req, res) => {
+  const { email } = req.body;
   let users = readUsers();
-  const user = users.find(u => u.email === email);
-  if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
-  res.json({ learningProgress: user.learningProgress || {} });
-});
-// Обновить прогресс (модуль/раздел/курс)
-app.post('/api/learning-progress', (req, res) => {
-  const { email, moduleId, sectionId, courseId, progress } = req.body;
-  if (!email || !moduleId || typeof progress !== 'number') {
-    return res.status(400).json({ error: 'Некорректные данные' });
-  }
-  let users = readUsers();
-  const idx = users.findIndex(u => u.email === email);
+  const idx = users.findIndex(u => u.email === email && !u.confirmed);
   if (idx === -1) {
-    return res.status(404).json({ error: 'Пользователь не найден' });
+    return res.status(404).json({ error: 'Пользователь не найден или уже подтвержден' });
   }
-  if (!users[idx].learningProgress) users[idx].learningProgress = {};
-  if (!users[idx].learningProgress[moduleId]) users[idx].learningProgress[moduleId] = { progress: 0, sections: {} };
-  if (sectionId) {
-    if (!users[idx].learningProgress[moduleId].sections[sectionId]) users[idx].learningProgress[moduleId].sections[sectionId] = { progress: 0, courses: {} };
-    if (courseId) {
-      users[idx].learningProgress[moduleId].sections[sectionId].courses[courseId] = progress;
-    } else {
-      users[idx].learningProgress[moduleId].sections[sectionId].progress = progress;
-    }
-  } else {
-    users[idx].learningProgress[moduleId].progress = progress;
+  if (users[idx].resent) {
+    return res.status(429).json({ error: 'Письмо уже отправлялось повторно' });
   }
-  writeUsers(users);
-  res.json({ success: true });
+  try {
+    await sendConfirmationMail(users[idx].email, users[idx].confirmToken);
+    users[idx].resent = true;
+    writeUsers(users);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Ошибка отправки письма' });
+  }
 });
 
 // 404 для остальных маршрутов
